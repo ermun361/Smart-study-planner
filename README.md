@@ -1,16 +1,55 @@
-# React + Vite
+# 📚 Smart Study Planner
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Smart Study Planner** is high-performance web application designed to help students manage their time intelligently. Unlike traditional to-do lists, this app uses a custom algorithm to generate a dynamic study schedule based on subject difficulty, exam dates, and user availability.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 The Problem
+Many students struggle with time management, often leading to "cramming" before exams, burnout, and poor retention of information. Existing digital planners are often too manual, requiring users to decide exactly what to study and when.
 
-## React Compiler
+## ✨ The Solution
+This application automates the planning process. By inputting subjects and deadlines, the **Smart Study Planner** calculates a logical distribution of study sessions, prioritizing harder subjects and upcoming exams to ensure a balanced and effective preparation phase.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
+- **Frontend:** React.js (Vite)
+- **Styling:** Tailwind CSS (Posh, responsive UI)
+- **State Management:** Zustand (with Persistence for local data saving)
+- **Icons:** Lucide-React
+- **Date Handling:** date-fns
+- **UI Components:** react-calendar
+- **External API:** Advice Slip API (Daily Motivation)
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## 🌟 Core Features
+- **Intelligent Dashboard:** View daily tasks, upcoming exams, and a motivational "Hero" section.
+- **Dynamic Task Generator:** Automatically creates study sessions based on a subject's difficulty rating (Easy, Medium, Hard).
+- **Interactive Calendar:** A visual overview of deadlines and daily study loads.
+- **Subject Manager:** Easily add, edit, or remove subjects and track their individual progress.
+- **Persistent Data:** Your study plan stays with you—even after a page refresh—thanks to browser local storage integration.
+- **Responsive Design:** A seamless experience across Desktop, Tablet, and Mobile devices.
+
+
+## 📅 Roadmap (3-Week Sprint)
+
+### Week 1: Foundation & CRUD
+- [ ] Project setup and theme configuration.
+- [ ] Subject Management (Add/Delete subjects).
+- [ ] Data persistence with Zustand.
+
+### Week 2: The "Smart" Engine
+- [ ] Implement the study task generation algorithm.
+- [ ] Integrate the visual Calendar component.
+- [ ] Build the interactive Daily Task checklist.
+
+### Week 3: Analytics & Polish
+- [ ] Create the Progress Analytics dashboard.
+- [ ] Integrate the Motivation API.
+- [ ] Final UI/UX refinements and deployment.
+
+
+
+## ⚙️ Installation & Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/ermun361/Smart-study-planner.git

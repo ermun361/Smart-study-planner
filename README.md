@@ -53,3 +53,13 @@ This application automates the planning process. By inputting subjects and deadl
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/ermun361/Smart-study-planner.git
+
+
+
+
+
+### 🗓️ Week 1 Status: Foundation
+- [x] Day 1: Tailwind v4 & Project Setup
+- [x] Day 2: Desktop Sidebar UI
+- [x] Day 3: Mobile Responsiveness (State-based Sidebar)
+- [x] Day 4: Flat-Grid Dashboard Layout

@@ -55,11 +55,15 @@ This application automates the planning process. By inputting subjects and deadl
    git clone https://github.com/ermun361/Smart-study-planner.git
 
 
+## 📈 Progress Log
+
+### **Week 1: The Foundation**
+- [x] **Day 1:** Project Setup & Tailwind v4 DNA Integration.
+- [x] **Day 2:** Desktop Sidebar & Dashboard Skeleton.
+- [x] **Day 3:** Mobile Responsiveness & Hamburger Logic (React `useState`).
+- [x] **Day 4:** Flat-Grid Layout System for Dashboard widgets.
+- [x] **Day 5:** Architectural Refactor (Components vs. Pages).
+- [x] **Day 6:** Zustand Data Store & Subject CRUD implementation.
 
 
 
-### 🗓️ Week 1 Status: Foundation
-- [x] Day 1: Tailwind v4 & Project Setup
-- [x] Day 2: Desktop Sidebar UI
-- [x] Day 3: Mobile Responsiveness (State-based Sidebar)
-- [x] Day 4: Flat-Grid Dashboard Layout

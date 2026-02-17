@@ -1,44 +1,28 @@
-import React, { useState } from 'react';
-import Sidebar from './components/Sidebar';
-import Header from './components/Header';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import MainLayout from './layout/MainLayout';
 import Dashboard from './pages/Dashboard';
-import { useSubjectStore } from './store/useSubjectStore'; // Import the Zustand store hook
-import AddSubjectModal from './components/AddSubjectModal';
-
-
+// Import or create placeholders for the other pages
+const SubjectsPage = () => <div className="p-8 text-2xl font-bold">Subjects Page Coming Next!</div>;
+const ProgressPage = () => <div className="p-8 text-2xl font-bold italic text-gray-400">Progress Tracking (Week 3)</div>;
+const SettingsPage = () => <div className="p-8 text-2xl font-bold italic text-gray-400">Preferences (Week 3)</div>;
 
 function App() {
-
-  
- const [isMenuOpen, setIsMenuOpen] = useState(false); // State to track if the mobile menu (sidebar) is open or closed
- const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
-
-
- const toggleMenu = () => setIsMenuOpen(!isMenuOpen); // Function to toggle the mobile menu
-
-
   return (
-    <div className="flex h-screen bg-[#F9F9FB] font-sans relative overflow-hidden">
-
-      {/* Passing state to Sidebar & Header */}
-      <Sidebar isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
-
-      <div className="flex-1 flex flex-col w-full">
-        <Header toggleMenu={toggleMenu} />
-
-        <main className="flex-1 overflow-y-auto p-4 lg:p-8">
-         <Dashboard onAddClick = {() => setIsModalOpen(true)} />
-        </main>
-
-      </div>
-      <AddSubjectModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)}
-     />
-
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* Everything inside this Route will share the Sidebar layout */}
+        <Route element={<MainLayout />}>
+          {/* Default redirect to Dashboard */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/subjects" element={<SubjectsPage />} />
+          <Route path="/progress" element={<ProgressPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
 export default App;
-

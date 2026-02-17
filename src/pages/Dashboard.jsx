@@ -1,53 +1,55 @@
 import React from 'react';
-import { useSubjectStore } from '../store/useSubjectStore'; 
-import { BookOpen, Trash2 } from 'lucide-react'; 
+import { useSubjectStore } from '../store/useSubjectStore';
+import { Trash2, CheckCircle2, Circle } from 'lucide-react';
 
 const Dashboard = ({ onAddClick }) => {
-  // Grab the subjects and the delete function from the store
-  const { subjects, deleteSubject } = useSubjectStore();
+  // Pull data from our store
+  const { subjects, deleteSubject, tasks, toggleTask } = useSubjectStore();
+
+  // Simple check for today's date
+  const today = new Date().toISOString().split('T')[0];
 
   return (
-    <>
-      <div className="w-full bg-white p-6 lg:p-10 rounded-3xl shadow-sm border border-gray-100 text-center mb-8">
-        <h2 className="text-xl lg:text-2xl font-bold text-gray-800 leading-relaxed">
+    <div className="max-w-7xl mx-auto">
+      
+      {/* Friendly Quote */}
+      <div className="w-full bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center mb-8">
+        <h2 className="text-xl font-bold text-gray-800">
           "Success is the sum of small efforts, repeated day in and day out"
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        {/* LEFT COLUMN: Calendar & Subjects */}
+        {/* LEFT SIDE: Calendar & Subjects */}
         <div className="lg:col-span-8 space-y-8">
-          <div className="h-80 bg-white rounded-3xl shadow-sm border border-gray-100 p-6 flex items-center justify-center text-gray-300 font-medium italic">
-            Calendar Component Coming in Week 2...
+          
+          {/* Calendar Placeholder (We build this next!) */}
+          <div className="h-80 bg-white rounded-3xl shadow-sm border border-gray-100 p-6 flex items-center justify-center text-gray-400 italic">
+            Calendar Component coming next...
           </div>
 
-          {/* --- SUBJECT CARDS DISPLAY --- */}
+          {/* List of Subjects */}
           <div className="space-y-4">
             <h3 className="text-xl font-bold text-gray-800">Your Subjects</h3>
             
             {subjects.length === 0 ? (
               <div className="p-10 border-2 border-dashed border-gray-200 rounded-3xl text-center text-gray-400">
-                No subjects added yet. Start by clicking "+ Add Subject"
+                Click "+ Add Subject" to get started.
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {subjects.map((subject) => (
-                  <div key={subject.id} className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex justify-between items-center group">
+                {subjects.map((s) => (
+                  <div key={s.id} className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex justify-between items-center group">
                     <div>
-                      <h4 className="font-bold text-gray-800 uppercase tracking-tight">{subject.name}</h4>
-                      <p className="text-sm text-gray-500">Exam: {subject.examDate}</p>
-                      <span className={`inline-block mt-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase
-                        ${subject.difficulty === 'Hard' ? 'bg-red-100 text-red-600' : 
-                          subject.difficulty === 'Medium' ? 'bg-orange-100 text-orange-600' : 
-                          'bg-green-100 text-green-600'}`}>
-                        {subject.difficulty}
+                      <h4 className="font-bold text-gray-800 uppercase tracking-tight">{s.name}</h4>
+                      <p className="text-sm text-gray-500">Exam Date: {s.examDate}</p>
+                      <span className={`inline-block mt-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase 
+                        ${s.difficulty === 'Hard' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
+                        {s.difficulty}
                       </span>
                     </div>
-                    <button 
-                      onClick={() => deleteSubject(subject.id)}
-                      className="p-2 text-gray-300 hover:text-red-500 transition-colors"
-                    >
+                    <button onClick={() => deleteSubject(s.id)} className="text-gray-300 hover:text-red-500 transition-colors">
                       <Trash2 size={20} />
                     </button>
                   </div>
@@ -57,22 +59,49 @@ const Dashboard = ({ onAddClick }) => {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Tasks & Add Button */}
-        <div className="lg:col-span-4 lg:row-span-2 flex flex-col gap-8">
-          <div className="h-[500px] bg-white rounded-3xl shadow-sm border border-gray-100 p-6 flex items-center justify-center text-gray-300 font-medium italic text-center">
-            Task Generation Logic <br/> Coming in Week 2...
+        {/* RIGHT SIDE: Smart Tasks */}
+        <div className="lg:col-span-4 flex flex-col gap-6">
+          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 min-h-[450px]">
+            <h3 className="text-xl font-bold text-gray-800 mb-6">Study Plan</h3>
+            
+            <div className="space-y-3">
+              {tasks.length === 0 ? (
+                <p className="text-gray-400 italic text-center pt-20">Your schedule will appear here.</p>
+              ) : (
+                tasks.slice(0, 8).map((task) => (
+                  <div 
+                    key={task.id} 
+                    onClick={() => toggleTask(task.id)}
+                    className="flex items-center gap-3 p-3 rounded-2xl hover:bg-gray-50 cursor-pointer transition-all border border-transparent hover:border-gray-100"
+                  >
+                    {task.completed ? 
+                      <CheckCircle2 className="text-green-500" size={20} /> : 
+                      <Circle className="text-gray-300" size={20} />
+                    }
+                    <div className="overflow-hidden">
+                      <p className={`text-sm font-bold truncate ${task.completed ? 'line-through text-gray-400' : 'text-gray-700'}`}>
+                        {task.title}
+                      </p>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase">
+                        {task.date === today ? "Today" : task.date}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
           
           <button 
             onClick={onAddClick}
-            className="w-full bg-brandPurple hover:bg-indigo-700 text-white py-4 rounded-2xl font-bold shadow-lg shadow-brandPurple/20 transition-all active:scale-[0.98]"
+            className="w-full bg-brandPurple hover:bg-indigo-700 text-white py-4 rounded-2xl font-bold shadow-lg transition-all active:scale-95"
           >
             + Add Subject
           </button>
         </div>
 
       </div>
-    </>
+    </div>
   );
 }
 

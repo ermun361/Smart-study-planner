@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState} from 'react';
 import { useSubjectStore } from '../store/useSubjectStore';
+import SmartCalendar from '../components/dashboard/Calendar';
 import { Trash2, CheckCircle2, Circle } from 'lucide-react';
-
+ 
 const Dashboard = ({ onAddClick }) => {
   // Pull data from our store
   const { subjects, deleteSubject, tasks, toggleTask } = useSubjectStore();
-
-  // Simple check for today's date
   const today = new Date().toISOString().split('T')[0];
+
+  // local state for calendar selection
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -25,9 +28,10 @@ const Dashboard = ({ onAddClick }) => {
         <div className="lg:col-span-8 space-y-8">
           
           {/* Calendar Placeholder (We build this next!) */}
-          <div className="h-80 bg-white rounded-3xl shadow-sm border border-gray-100 p-6 flex items-center justify-center text-gray-400 italic">
-            Calendar Component coming next...
-          </div>
+          <SmartCalendar
+            selectedDate={selectedDate} 
+            onDateChange={setSelectedDate} 
+          />
 
           {/* List of Subjects */}
           <div className="space-y-4">

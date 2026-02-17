@@ -1,0 +1,58 @@
+.react-calendar {
+  width: 100% !important;
+  border: none !important;
+  font-family: inherit !important;
+  background: transparent !important;
+}
+
+/* Day Tiles */
+.react-calendar__tile {
+  padding: 1.5em 0.5em !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  position: relative !important;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.react-calendar__tile:hover {
+  background-color: #f3f4f6 !important; /* gray-100 */
+}
+
+/* The Active/Selected Day */
+.react-calendar__tile--active {
+  background: #6366f1 !important; /* brandPurple */
+  color: white !important;
+  border-radius: 12px;
+}
+
+/* Today's highlighting */
+.react-calendar__tile--now {
+  background: #e0e7ff !important; /* light indigo */
+  color: #6366f1 !important;
+  font-weight: bold;
+}
+
+/* Navigation Buttons */
+.react-calendar__navigation button {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #374151;
+}
+
+/* THE DOT: This is our Smart Indicator */
+.task-dot {
+  height: 6px;
+  width: 6px;
+  background-color: #6366f1; /* purple dot */
+  border-radius: 50%;
+  margin-top: 4px;
+}
+
+.exam-dot {
+  background-color: #242121 !important; /* Red dot for exams */
+  width: 20px !important;
+  height: 2px !important;
+  border-radius: 2px !important;
+}

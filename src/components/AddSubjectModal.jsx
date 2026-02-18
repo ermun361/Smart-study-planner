@@ -14,7 +14,7 @@ const AddSubjectModal = ({ isOpen, onClose}) => {
     //  Access the 'addSubject' function from the Zustand store
     const { addSubject } = useSubjectStore();
 
-    if (!isOpen) return null; // Don't render the modal if 'isOpen' is false
+    // if (!isOpen) return null; // Don't render the modal if 'isOpen' is false
 
     //  Handle form submission
     const handleSubmit = (e) => {

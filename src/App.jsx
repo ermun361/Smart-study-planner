@@ -1,26 +1,40 @@
+import React, { useState } from 'react'; // 1. Added useState
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './layout/MainLayout';
 import Dashboard from './pages/Dashboard';
-// Import or create placeholders for the other pages
-const SubjectsPage = () => <div className="p-8 text-2xl font-bold">Subjects Page Coming Next!</div>;
+import SubjectsPage from './pages/Subjects'; 
+import AddSubjectModal from './components/AddSubjectModal';
+
+// Placeholders for pages NOT yet built (Keep these)
 const ProgressPage = () => <div className="p-8 text-2xl font-bold italic text-gray-400">Progress Tracking (Week 3)</div>;
 const SettingsPage = () => <div className="p-8 text-2xl font-bold italic text-gray-400">Preferences (Week 3)</div>;
 
 function App() {
+  // 3. Define the Modal state here so it can be opened from any page
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <BrowserRouter>
       <Routes>
-        {/* Everything inside this Route will share the Sidebar layout */}
         <Route element={<MainLayout />}>
-          {/* Default redirect to Dashboard */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/subjects" element={<SubjectsPage />} />
+          {/* 4. Pass the onAddClick prop to both Dashboard and Subjects */}
+          <Route path="/dashboard" element={<Dashboard onAddClick={() => setIsModalOpen(true)} />} />
+          <Route 
+              path="/subjects" 
+              element={<SubjectsPage onAddClick={() => setIsModalOpen(true)} />} 
+            />
+          
           <Route path="/progress" element={<ProgressPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>
       </Routes>
+
+      {/* 5. Render the Modal here so it shows up regardless of which page you are on */}
+      {isModalOpen && (
+        <AddSubjectModal onClose={() => setIsModalOpen(false)} />
+      )}
     </BrowserRouter>
   );
 }

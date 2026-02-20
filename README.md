@@ -64,6 +64,3 @@ This application automates the planning process. By inputting subjects and deadl
 - [x] **Day 4:** Flat-Grid Layout System for Dashboard widgets.
 - [x] **Day 5:** Architectural Refactor (Components vs. Pages).
 - [x] **Day 6:** Zustand Data Store & Subject CRUD implementation.
-
-
-

@@ -33,7 +33,7 @@ export const generateSmartTasks = (subjects) => {
         allTasks.push({
           id: `task-${subject.id}-${i}`,
           subjectId: subject.id,
-          title: `Review: ${subject.name}`, // You could add `(Part ${i+1})` if you want
+          title: `Review: ${subject.name}`, 
           date: dateStr,
           completed: false,
           difficulty: subject.difficulty,

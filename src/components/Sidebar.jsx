@@ -78,7 +78,6 @@ const Sidebar = ({ isMenuOpen, toggleMenu }) => {
             <span>Preferences</span>
           </NavLink>
           
-          {/* Logout could be a button or a link depending on your setup */}
           <button className="w-full flex items-center gap-3 p-3 text-white/50 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all mt-4">
             <LogOut size={20} />
             <span className="font-medium">Log out</span>

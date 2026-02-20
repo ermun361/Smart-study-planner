@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSubjectStore } from '../store/useSubjectStore';
 import { Search, Edit3, Trash2, Book, Plus } from 'lucide-react';
+import AddSubjectModal from '../components/AddSubjectModal';
 
 const SubjectsPage = ({ onAddClick }) => {
   // Pull the subjects and the delete function from the store
   const { subjects, deleteSubject } = useSubjectStore();
 
-  return (
+  // local state to handle which subject to edit
+  const [ editingSubject, setEditingSubject ] = useState(null);
+
+   return (
     <div className="flex flex-col h-full">
       {/* --- TOP HEADER BAR --- */}
       <div className="flex items-center justify-between mb-8 bg-gray-100/50 p-4 rounded-2xl">
@@ -26,7 +30,6 @@ const SubjectsPage = ({ onAddClick }) => {
               className="pl-10 pr-4 py-2 bg-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-brandPurple/20 w-64"
             />
           </div>
-          {/* Profile Circle */}
           <div className="w-10 h-10 rounded-full bg-brandPurple flex items-center justify-center text-white shadow-sm border-2 border-white font-bold text-xs">
             JD
           </div>
@@ -37,10 +40,8 @@ const SubjectsPage = ({ onAddClick }) => {
       <div className="flex-1 px-2">
         {subjects.length === 0 ? (
           
-          /* --- THE CLIPBOARD EMPTY STATE (Appears when list is empty) --- */
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="relative mb-8">
-              {/* Clipboard UI Drawing */}
               <div className="w-48 h-60 bg-gray-100 rounded-[2rem] flex flex-col items-center p-6 shadow-sm border border-gray-200">
                 <div className="w-16 h-6 bg-purple-300 rounded-full mb-8" />
                 <div className="w-full h-2 bg-gray-200 rounded-full mb-3" />
@@ -65,7 +66,6 @@ const SubjectsPage = ({ onAddClick }) => {
 
         ) : (
 
-          /* --- THE ACTIVE LIST (Shows subjects with Trash Icon) --- */
           <div className="flex flex-col items-center">
              <div className="space-y-4 w-full max-w-4xl">
                 {subjects.map((s) => (
@@ -84,12 +84,14 @@ const SubjectsPage = ({ onAddClick }) => {
                     </span>
                     
                     <div className="flex items-center gap-2">
-                        {/* Edit Icon (Placeholder for now) */}
-                        <button className="p-2 text-gray-400 hover:text-brandPurple transition-colors">
+                        {/* EDIT ICON - Now connected! */}
+                        <button 
+                          onClick={() => setEditingSubject(s)} 
+                          className="p-2 text-gray-400 hover:text-brandPurple transition-colors"
+                        >
                             <Edit3 size={18} />
                         </button>
                         
-                        {/* TRASH ICON (Functional Delete) */}
                         <button 
                             onClick={() => deleteSubject(s.id)}
                             className="p-2 text-gray-400 hover:text-red-500 transition-colors"
@@ -102,7 +104,6 @@ const SubjectsPage = ({ onAddClick }) => {
                 ))}
             </div>
 
-            {/* Bottom Add Button so user can keep adding more */}
             <button 
                 onClick={onAddClick}
                 className="mt-10 bg-brandPurple hover:bg-indigo-700 text-white px-12 py-4 rounded-3xl font-bold shadow-xl transition-all active:scale-95"
@@ -112,6 +113,14 @@ const SubjectsPage = ({ onAddClick }) => {
           </div>
         )}
       </div>
+
+      {/* EDIT MODAL - Shows up when editingSubject is not null */}
+      {editingSubject && (
+        <AddSubjectModal 
+          editingSubject={editingSubject} 
+          onClose={() => setEditingSubject(null)} 
+        />
+      )}
     </div>
   );
 };

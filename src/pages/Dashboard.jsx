@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useSubjectStore } from '../store/useSubjectStore';
 import SmartCalendar from '../components/dashboard/Calendar';
-import { CheckCircle2, Circle } from 'lucide-react';
+import { CheckCircle2, Circle, Forward } from 'lucide-react';
 import { format } from 'date-fns'; // We use this to match calendar dates to task dates
 
 const Dashboard = ({ onAddClick }) => {
-  const { tasks, toggleTask } = useSubjectStore();
+  const { tasks, toggleTask,skipTask } = useSubjectStore();
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   // 1. Convert the calendar's selectedDate into a "YYYY-MM-DD" string
@@ -57,7 +57,7 @@ const Dashboard = ({ onAddClick }) => {
                   <div 
                     key={task.id} 
                     onClick={() => toggleTask(task.id)}
-                    className={`flex items-center gap-3 p-4 rounded-2xl cursor-pointer transition-all border
+                    className={`flex items-center gap-3 p-4 rounded-2xl cursor-pointer transition-all border group
                       ${task.completed 
                         ? 'bg-gray-50 border-transparent opacity-60' 
                         : 'bg-white border-gray-50 shadow-sm hover:border-brandPurple/30'}`}
@@ -65,10 +65,10 @@ const Dashboard = ({ onAddClick }) => {
                     {task.completed ? (
                       <CheckCircle2 className="text-green-500" size={20} />
                     ) : (
-                      <Circle className="text-gray-300" size={20} />
+                      <Circle className="text-gray-300 group-hover:text-brandPurple" size={20} />
                     )}
                     
-                    <div className="overflow-hidden">
+                    <div className="overflow-hidden flex-1">
                       <p className={`text-sm font-bold truncate ${task.completed ? 'line-through text-gray-400' : 'text-gray-700'}`}>
                         {task.title}
                       </p>
@@ -78,6 +78,22 @@ const Dashboard = ({ onAddClick }) => {
                         </span>
                       )}
                     </div>
+
+                    {/* 2. THE SKIP OPTION */}
+                    {/* Only show if not an exam and not completed */}
+                    {!task.completed && !task.isExam && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevents toggleTask from firing
+                          skipTask(task.id);
+                        }}
+                        className="opacity-0 group-hover:opacity-100 flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-50 text-brandPurple text-[10px] font-bold uppercase transition-all hover:bg-brandPurple hover:text-white"
+                        title="Move to tomorrow"
+                      >
+                        <Forward size={12} />
+                        Skip
+                      </button>
+                    )}
                   </div>
                 ))
               )}
@@ -86,7 +102,7 @@ const Dashboard = ({ onAddClick }) => {
             {/* Progress shortcut */}
             {filteredTasks.length > 0 && (
                <p className="mt-4 text-[10px] text-center font-bold text-gray-400 uppercase tracking-widest">
-                  Click a task to mark as complete
+                  Tap to complete • Hover to skip
                </p>
             )}
           </div>

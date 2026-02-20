@@ -2,19 +2,20 @@ import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { useSubjectStore } from '../store/useSubjectStore'; 
 
-const AddSubjectModal = ({ isOpen, onClose}) => {
-    // 1. Local state for the form inputs
+const AddSubjectModal = ({  onClose, editingSubject }) => {
+    // 1. Initialize local state. 
+    // If editingSubject is passed, we fill the form with its data.
+    // Otherwise, we start with empty fields.
+
     const [formData, setFormData] = useState ({
-        name: '',
-        examDate: '',
-        difficulty: 'Medium',
+        name: editingSubject ? editingSubject.name : '',
+        examDate: editingSubject ? editingSubject.examDate : '',
+        difficulty: editingSubject ? editingSubject.difficulty : 'Medium',
     });
 
 
     //  Access the 'addSubject' function from the Zustand store
-    const { addSubject } = useSubjectStore();
-
-    // if (!isOpen) return null; // Don't render the modal if 'isOpen' is false
+    const { addSubject, updateSubject } = useSubjectStore();
 
     //  Handle form submission
     const handleSubmit = (e) => {
@@ -28,20 +29,22 @@ const AddSubjectModal = ({ isOpen, onClose}) => {
             return;
         }
 
-    // 3. Create a new subject object with a unique ID
-    const newSubject = {
-        ...formData,
-        id: Date.now().toString(), // Simple unique ID based on timestamp
+        if (editingSubject) {
+            //3.EDIT MODE: update existing subject
+            updateSubject(editingSubject.id, formData);
+            console.log("Updating Subject:", formData);
+        } else {
+            // 4. ADD MODE: Create new subject
+            const newSubject = {
+                ...formData,
+                id: Date.now().toString(),
+            };
+            addSubject(newSubject);
+            console.log("Adding New Subject:", newSubject);
+        }
+
+        onClose(); // Close modal after saving
     };
-
-    // 4. Add the new subject to the store and close the modal
-    addSubject(newSubject);
-    onClose(); // Close modal after saving
-    setFormData({ name: '', examDate: '', difficulty: 'Medium' }); // Reset form
-
-    console.log("Adding Subject to Store:", newSubject); // <--- ADD THIS
-   
-  };
 
   return (
         <div className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">

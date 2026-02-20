@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSubjectStore } from '../store/useSubjectStore';
 import SmartCalendar from '../components/dashboard/Calendar';
-import { CheckCircle2, Circle, Forward } from 'lucide-react';
+import { fetchMotivation } from '../utils/motivationApi';
+import { CheckCircle2, Circle, Forward, Quote } from 'lucide-react';
 import { format } from 'date-fns'; // We use this to match calendar dates to task dates
 
 const Dashboard = ({ onAddClick }) => {
   const { tasks, toggleTask,skipTask } = useSubjectStore();
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  // Motivation state & logic
+  const [quote, setQuote] = useState("Loading your daily motivation...");
+
+  useEffect(() => {
+    const getQuote = async () => {
+      const dailyQuote = await fetchMotivation();
+      setQuote(dailyQuote);
+    };
+    getQuote();
+  }, []);
 
   // 1. Convert the calendar's selectedDate into a "YYYY-MM-DD" string
   const selectedDateStr = format(selectedDate, 'yyyy-MM-dd');
@@ -14,13 +26,24 @@ const Dashboard = ({ onAddClick }) => {
   // 2. Filter tasks so we ONLY show ones for the date clicked on the calendar
   const filteredTasks = tasks.filter((task) => task.date === selectedDateStr);
 
-  return (
+ return (
     <div className="max-w-7xl mx-auto">
-      {/* Friendly Quote */}
-      <div className="w-full bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center mb-8">
-        <h2 className="text-xl font-bold text-gray-800 leading-relaxed">
-          "Success is the sum of small efforts, repeated day in and day out"
-        </h2>
+      
+      {/* --- PREMIUM HERO QUOTE SECTION --- */}
+      <div className="w-full bg-gradient-to-br from-brandPurple to-indigo-600 p-8 lg:p-12 rounded-[2.5rem] shadow-xl shadow-indigo-100 text-center mb-10 relative overflow-hidden group">
+        {/* Decorative background circle */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl transition-all group-hover:scale-150 duration-700"></div>
+        
+        <div className="relative z-10 flex flex-col items-center">
+          <Quote className="text-white/20 mb-4" size={40} />
+          <h2 className="text-xl lg:text-3xl font-black text-white leading-tight italic max-w-4xl">
+            "{quote}"
+          </h2>
+          <div className="h-1 w-20 bg-white/30 rounded-full mt-6 mb-2"></div>
+          <p className="text-indigo-100 text-[10px] font-bold uppercase tracking-[0.3em] opacity-80">
+            Daily Academic Fuel
+          </p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -79,12 +102,10 @@ const Dashboard = ({ onAddClick }) => {
                       )}
                     </div>
 
-                    {/* 2. THE SKIP OPTION */}
-                    {/* Only show if not an exam and not completed */}
                     {!task.completed && !task.isExam && (
                       <button
                         onClick={(e) => {
-                          e.stopPropagation(); // Prevents toggleTask from firing
+                          e.stopPropagation(); 
                           skipTask(task.id);
                         }}
                         className="opacity-0 group-hover:opacity-100 flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-50 text-brandPurple text-[10px] font-bold uppercase transition-all hover:bg-brandPurple hover:text-white"
@@ -99,7 +120,6 @@ const Dashboard = ({ onAddClick }) => {
               )}
             </div>
 
-            {/* Progress shortcut */}
             {filteredTasks.length > 0 && (
                <p className="mt-4 text-[10px] text-center font-bold text-gray-400 uppercase tracking-widest">
                   Tap to complete • Hover to skip

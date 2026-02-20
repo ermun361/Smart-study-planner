@@ -34,10 +34,12 @@ This application automates the planning process. By inputting subjects and deadl
 - [x] Data persistence with Zustand.
 
 ### Week 2: The "Smart" Engine ✅
-- [x] Implement the study task generation algorithm.
+- [x] Implement the study task generation algorithm with weighted scheduling and anti-repeat logic
 - [x] Integrate the visual Calendar component with task mapping.
-- [x] Build multi-page architecture with React Router.
-- [x] Finalize CRUD (Edit/Update logic) and Task Skip interaction.
+- [x] Build multi-page architecture with React Router and an adaptive Sidebar shell
+- [x] Finalize CRUD (Edit/Update logic) and Task Skip rescheduling logic.
+- [x] Integrated the Motivation API with a graceful fallback and instant-load UX strategy.
+- [x] Engineered Mobile Responsiveness across all views using adaptive grids and touch-friendly components.
 
 ### Week 3: Analytics & Polish ⏳
 - [ ] Create the Progress Analytics dashboard.

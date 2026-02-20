@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSubjectStore } from '../store/useSubjectStore';
 import SmartCalendar from '../components/dashboard/Calendar';
-import { fetchMotivation } from '../utils/motivationApi';
+import { fetchMotivation, getLocalQuote } from '../utils/motivationApi';
 import { CheckCircle2, Circle, Forward, Quote } from 'lucide-react';
 import { format } from 'date-fns'; // We use this to match calendar dates to task dates
 
@@ -10,11 +10,12 @@ const Dashboard = ({ onAddClick }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   // Motivation state & logic
-  const [quote, setQuote] = useState("Loading your daily motivation...");
+  const [quote, setQuote] = useState(getLocalQuote());
 
   useEffect(() => {
     const getQuote = async () => {
       const dailyQuote = await fetchMotivation();
+      // Only update if the API actually returned something different
       setQuote(dailyQuote);
     };
     getQuote();
@@ -36,7 +37,7 @@ const Dashboard = ({ onAddClick }) => {
         
         <div className="relative z-10 flex flex-col items-center">
           <Quote className="text-white/20 mb-4" size={40} />
-          <h2 className="text-xl lg:text-3xl font-black text-white leading-tight italic max-w-4xl">
+          <h2 key={quote} className="animate-fade-intext-xl lg:text-3xl font-black text-white leading-tight italic max-w-4xl">
             "{quote}"
           </h2>
           <div className="h-1 w-20 bg-white/30 rounded-full mt-6 mb-2"></div>

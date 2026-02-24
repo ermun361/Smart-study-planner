@@ -34,7 +34,15 @@ const LandingPage = () => {
                     </button>
                 </div>
 
-                <MiniCalendar />
+                <div className="relative bg-white p-2 rounded-[2.5rem] shadow-2xl border-4 border-white/50 overflow-hidden transform lg:rotate-2 group-hover:rotate-0 transition-transform duration-700">
+                    <img 
+                    src="src\assets\Images\Screenshot 2026-02-24 122705.png"
+                     alt="dashboard mock up"
+                     className="rounded-[2rem] w-full h-auto object-cover"
+                    />
+                </div>
+
+                
             </main>
             
         </div>

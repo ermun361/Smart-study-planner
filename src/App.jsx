@@ -7,7 +7,7 @@ import AddSubjectModal from './components/AddSubjectModal';
 import ProgressPage from './pages/ProgressPage';
 import LandingPage from './pages/LandingPage';
 
-// Placeholders for pages NOT yet built (Keep these)
+// Placeholders for pages NOT yet built 
 const SettingsPage = () => <div className="p-8 text-2xl font-bold italic text-gray-400">Preferences (Week 3)</div>;
 
 function App() {
@@ -17,23 +17,33 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* --- 1. PUBLIC ROUTE  --- */}
+        <Route path="/" element={<LandingPage />} />
+
+        {/* --- 2. PRIVATE APP ROUTES */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          {/* We remove the Navigate from "/" so it doesn't skip the Landing Page */}
           
-          {/* 4. Pass the onAddClick prop to both Dashboard and Subjects */}
-          <Route path="/dashboard" element={<Dashboard onAddClick={() => setIsModalOpen(true)} />} />
           <Route 
-              path="/subjects" 
-              element={<SubjectsPage onAddClick={() => setIsModalOpen(true)} />} 
-            />
+            path="/dashboard" 
+            element={<Dashboard onAddClick={() => setIsModalOpen(true)} />} 
+          />
+          
+          <Route 
+            path="/subjects" 
+            element={<SubjectsPage onAddClick={() => setIsModalOpen(true)} />} 
+          />
           
           <Route path="/progress" element={<ProgressPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>
+
+        {/* --- 3. CATCH-ALL REDIRECT --- */}
+        {/* If a user goes to a page that doesn't exist, send them home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
-      {/* 5. Render the Modal here so it shows up regardless of which page you are on */}
+      {/* 4. GLOBAL MODAL */}
       {isModalOpen && (
         <AddSubjectModal onClose={() => setIsModalOpen(false)} />
       )}

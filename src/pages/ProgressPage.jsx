@@ -46,7 +46,7 @@ const ProgressPage = () => {
         />
       </div>
 
-      {/* 3. SUBJECT BREAKDOWN CONTAINER (The white card) */}
+      {/* 3. SUBJECT BREAKDOWN CONTAINER  */}
       <div className="bg-white p-8 md:p-12 rounded-[2.5rem] lg:rounded-[3.5rem] shadow-sm border border-gray-100">
         <div className="flex items-center gap-3 mb-10 px-2">
           <div className="p-2 bg-indigo-100 rounded-lg text-brandPurple">

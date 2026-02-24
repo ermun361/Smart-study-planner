@@ -1,6 +1,9 @@
 import React from 'react';
 import { Book } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import MiniCalendar from '../components/MiniCalendar';
+
+
 
 
 const LandingPage = () => {
@@ -30,6 +33,8 @@ const LandingPage = () => {
                         Get Started
                     </button>
                 </div>
+
+                <MiniCalendar />
             </main>
             
         </div>

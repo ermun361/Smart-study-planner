@@ -1,5 +1,6 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom'; // 1. Added useNavigate
+import { useAuthStore } from '../store/useAuthStore'; // 2. Added useAuthStore
 import {
   LayoutDashboard, 
   BookOpen, 
@@ -11,13 +12,22 @@ import {
 } from 'lucide-react';
 
 const Sidebar = ({ isMenuOpen, toggleMenu }) => {
+  // 3. Initialize hooks
+  const logout = useAuthStore((state) => state.logout);
+  const navigate = useNavigate();
   
-  // A helper to handle the link styling and keep the code clean
+  // 4. Logout Handler
+  const handleLogout = () => {
+    logout(); // This clears the user and token from localStorage
+    navigate('/'); // Redirect back to Landing Page
+    if (isMenuOpen) toggleMenu(); // Close mobile menu if it was open
+  };
+
   const navLinkClass = ({ isActive }) => 
     `flex items-center gap-3 p-3 rounded-xl transition-all ${
       isActive 
-      ? 'bg-white/20 text-white shadow-inner font-bold' // Active Style
-      : 'text-white/70 hover:bg-white/10 hover:text-white' // Inactive Style
+      ? 'bg-white/20 text-white shadow-inner font-bold' 
+      : 'text-white/70 hover:bg-white/10 hover:text-white' 
     }`;
 
   return (
@@ -39,20 +49,17 @@ const Sidebar = ({ isMenuOpen, toggleMenu }) => {
       `}>
 
         <div>
-          {/* Brand Logo Area */}
           <div className="p-6 flex items-center justify-between text-xl font-bold border-b border-white/10">
             <div className="flex items-center gap-3">
               <Book className="w-8 h-8 fill-white/20" />
               <span className="tracking-tight text-white uppercase text-lg">Smart Planner</span>
             </div>
             
-            {/* Close Button for Mobile */}
             <button onClick={toggleMenu} className="lg:hidden text-white/70 hover:text-white">
               <X size={24} />
             </button>
           </div>
 
-          {/* Navigation Links */}
           <nav className="px-4 mt-6 space-y-1">
             <NavLink to="/dashboard" onClick={isMenuOpen ? toggleMenu : null} className={navLinkClass}>
               <LayoutDashboard size={20} />
@@ -78,9 +85,13 @@ const Sidebar = ({ isMenuOpen, toggleMenu }) => {
             <span>Preferences</span>
           </NavLink>
           
-          <button className="w-full flex items-center gap-3 p-3 text-white/50 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all mt-4">
-            <LogOut size={20} />
-            <span className="font-medium">Log out</span>
+          {/* 5. LOGOUT BUTTON */}
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 p-3 text-white/50 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all mt-4 group"
+          >
+            <LogOut size={20} className="group-hover:stroke-red-400" />
+            <span className="font-medium group-hover:text-red-400">Log out</span>
           </button>
         </div>
       </aside>

@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import SubjectsPage from './pages/Subjects'; 
 import AddSubjectModal from './components/AddSubjectModal';
 import ProgressPage from './pages/ProgressPage';
+import LandingPage from './pages/LandingPage';
 
 // Placeholders for pages NOT yet built (Keep these)
 const SettingsPage = () => <div className="p-8 text-2xl font-bold italic text-gray-400">Preferences (Week 3)</div>;
@@ -17,6 +18,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<MainLayout />}>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           
           {/* 4. Pass the onAddClick prop to both Dashboard and Subjects */}

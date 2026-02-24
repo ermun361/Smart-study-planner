@@ -60,6 +60,14 @@ export const useSubjectStore = create(
         }));
       },
 
+      getSubjectProgress: (subjectId) => {
+        const { tasks } = get();
+        const subjectTasks = tasks.filter((t) => t.subjectId === subjectId);
+        if (subjectTasks.length === 0) return 0;
+        const completed = subjectTasks.filter((t) => t.completed).length;
+        return Math.round((completed / subjectTasks.length) * 100);
+      },
+
       
       /**
        * UPDATED: GET TOTAL STATS (WEIGHTED)
@@ -92,7 +100,7 @@ export const useSubjectStore = create(
           }
         });
 
-        // Final human-readable stats
+       
         return {
           total: tasks.length,
           completed: tasks.filter((t) => t.completed).length,

@@ -1,15 +1,14 @@
 import React from 'react';
 
-
 const SubjectProgressBar = ({name, difficulty, progress}) => {
     return (
         <div className="group">
       <div className="flex justify-between items-end mb-3 px-1">
         <div>
-          <h4 className="font-bold text-gray-800 uppercase text-sm tracking-tight group-hover:text-brandPurple transition-colors">
+          <h4 className="text-lg font-bold text-gray-800 group-hover:text-brandPurple transition-colors">
             {name}
           </h4>
-          <p className={`text-[10px] font-bold uppercase tracking-widest ${
+          <p className={`text-[10px] font-black uppercase tracking-widest ${
             difficulty === 'Hard' ? 'text-red-500' :
             difficulty === 'Medium' ? 'text-orange-500' :
             'text-green-500'

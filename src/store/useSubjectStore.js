@@ -3,12 +3,18 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { generateSmartTasks } from '../utils/smartEngine';
 import { addDays, format, parseISO } from 'date-fns';
 
+const DIFFICULTY_WEIGHTS = {
+  Hard: 3,   // 1 task in a Hard subject = 3 points
+  Medium: 2, // 1 task in a Medium subject = 2 points
+  Easy: 1    // 1 task in an Easy subject = 1 point
+};
+
 export const useSubjectStore = create(
   persist(
     (set, get) => ({
       subjects: [],
       tasks: [],
-
+      // --- ADD SUBJECT ---
       addSubject: (newSubject) => {
         const updatedSubjects = [...get().subjects, newSubject];
         set({
@@ -16,7 +22,7 @@ export const useSubjectStore = create(
           tasks: generateSmartTasks(updatedSubjects)
         });
       },
-
+       // --- DELETE SUBJECT ---
       deleteSubject: (id) => {
         const updatedSubjects = get().subjects.filter((s) => s.id !== id);
         set({
@@ -25,15 +31,15 @@ export const useSubjectStore = create(
         });
       },
 
-      // --- FIXED: updateSubject now has closing brace and correct variable name ---
+      // --- UPDATE SUBJECT (e.g., Change Name or Difficulty) ---
       updateSubject: (id, updateData) => {
         const updatedSubjects = get().subjects.map((s) =>
           s.id === id ? { ...s, ...updateData } : s
         );
         // Regenerate tasks because data changed
         set({ subjects: updatedSubjects, tasks: generateSmartTasks(updatedSubjects) });
-      }, // <--- This was missing!
-
+      },
+      // --- SKIP TASK (Moves it to the next day) ---
       skipTask: (taskId) => {
         set((state) => ({
           tasks: state.tasks.map((t) => {
@@ -45,7 +51,7 @@ export const useSubjectStore = create(
           }),
         }));
       },
-
+      // --- TOGGLE TASK (Mark as Done / Not Done) ---
       toggleTask: (taskId) => {
         set((state) => ({
           tasks: state.tasks.map((t) =>
@@ -54,16 +60,45 @@ export const useSubjectStore = create(
         }));
       },
 
-      // --- FIXED: Cleaned up formatting ---
+      
+      /**
+       * UPDATED: GET TOTAL STATS (WEIGHTED)
+       * Used for the main stats cards at the top of the Progress Page.
+       */
       getStats: () => {
-        const { tasks } = get();
-        if (tasks.length === 0) return { total: 0, completed: 0, percent: 0 };
+        const { tasks, subjects } = get();
+        
+        if (tasks.length === 0) {
+          return { total: 0, completed: 0, percent: 0 };
+        }
 
-        const completed = tasks.filter((t) => t.completed).length;
-        const total = tasks.length;
-        const percent = Math.round((completed / total) * 100);
+        let totalWeightedPoints = 0;
+        let earnedWeightedPoints = 0;
 
-        return { total, completed, percent };
+        // Loop through all tasks to calculate weighted progress
+        tasks.forEach((task) => {
+          // Find the subject this task belongs to
+          const parentSubject = subjects.find((s) => s.id === task.subjectId);
+          
+          // Determine the weight based on subject difficulty
+          const weight = DIFFICULTY_WEIGHTS[parentSubject?.difficulty] || 1;
+
+          // Add to the total "Points" possible
+          totalWeightedPoints += weight;
+
+          // If the task is finished, add the "Points" to the earned tally
+          if (task.completed) {
+            earnedWeightedPoints += weight;
+          }
+        });
+
+        // Final human-readable stats
+        return {
+          total: tasks.length,
+          completed: tasks.filter((t) => t.completed).length,
+          // Weighted percentage calculation
+          percent: Math.round((earnedWeightedPoints / totalWeightedPoints) * 100)
+        };
       },
     }),
     {

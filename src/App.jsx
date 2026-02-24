@@ -4,9 +4,9 @@ import MainLayout from './layout/MainLayout';
 import Dashboard from './pages/Dashboard';
 import SubjectsPage from './pages/Subjects'; 
 import AddSubjectModal from './components/AddSubjectModal';
+import ProgressPage from './pages/ProgressPage';
 
 // Placeholders for pages NOT yet built (Keep these)
-const ProgressPage = () => <div className="p-8 text-2xl font-bold italic text-gray-400">Progress Tracking (Week 3)</div>;
 const SettingsPage = () => <div className="p-8 text-2xl font-bold italic text-gray-400">Preferences (Week 3)</div>;
 
 function App() {

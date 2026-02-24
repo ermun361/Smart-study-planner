@@ -1,5 +1,6 @@
 import React from 'react';
 import { Book } from 'lucide-react';
+import { useAuthStore } from '../store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
 import MiniCalendar from '../components/MiniCalendar';
 
@@ -7,6 +8,7 @@ import MiniCalendar from '../components/MiniCalendar';
 
 
 const LandingPage = () => {
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     const navigate = useNavigate();
     return (
         <div className="min-h-screen bg-[#cbd5e1] text-slate-900">
@@ -18,7 +20,11 @@ const LandingPage = () => {
                     </div>
                     <span className="font-bold text-xl">Smart Planner</span>
                 </div>
-                <button className="bg-slate-400/40 px-8 py-2 rounded-xl font-bold">Login</button>
+                <button 
+                    onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
+                    className="bg-slate-400/30 px-8 py-2 rounded-xl font-bold">
+                    {isAuthenticated ? 'Dashboard' : 'Login'}
+                </button>
             </nav>
             {/*2. Main Content */}
             <main className="max-w-7xl mx-auto px-8 pt-12 grid lg:grid-cols-2 items-center">

@@ -5,16 +5,13 @@ import StatsCard from '../components/StatsCard';
 import SubjectProgressBar from '../components/SubjectProgressBar';
 
 const ProgressPage = () => {
-  // 1. Pull logic from the store
   const { subjects, getStats, getSubjectProgress } = useSubjectStore();
-  
-  // 2. Get the weighted stats
   const stats = getStats();
 
   return (
     <div className="max-w-6xl mx-auto pb-20 px-4">
       
-      {/* --- PAGE HEADER --- */}
+      {/* 1. PAGE HEADER */}
       <div className="mb-10 pt-4">
         <h1 className="text-3xl font-bold text-gray-800 tracking-tight">
           Your Progress
@@ -24,7 +21,7 @@ const ProgressPage = () => {
         </p>
       </div>
 
-      {/* --- STATS OVERVIEW --- */}
+      {/* 2. STATS OVERVIEW */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         <StatsCard
           title="Weighted Progress" 
@@ -42,17 +39,15 @@ const ProgressPage = () => {
         />
         <StatsCard
           title="Study Streak"
-          value="4 Days" // This could be dynamic later
+          value="4 Days"
           icon={<Award size={32} />}
           bgColor="bg-orange-50"
           iconColor="text-orange-500"
         />
       </div>
 
-      {/* --- SUBJECT BREAKDOWN CONTAINER --- */}
+      {/* 3. SUBJECT BREAKDOWN CONTAINER (The white card) */}
       <div className="bg-white p-8 md:p-12 rounded-[2.5rem] lg:rounded-[3.5rem] shadow-sm border border-gray-100">
-        
-        {/* Section Header */}
         <div className="flex items-center gap-3 mb-10 px-2">
           <div className="p-2 bg-indigo-100 rounded-lg text-brandPurple">
             <BookOpen size={24} />
@@ -62,24 +57,21 @@ const ProgressPage = () => {
           </h3>
         </div>
 
-        {/* --- SUBJECT LIST --- */}
         <div className="space-y-10">
           {subjects.length === 0 ? (
-            // Empty State (Matches the vibe of SubjectsPage)
             <div className="flex flex-col items-center justify-center py-16 text-center bg-gray-50 rounded-[2rem] border-2 border-dashed border-gray-100">
               <PlusCircle className="text-gray-300 mb-4" size={48} />
-              <p className="text-gray-500 font-medium max-w-xs">
-                No subjects found. Add a subject in the "My Subjects" tab to start tracking progress.
+              <p className="text-gray-500 font-medium max-w-xs text-gray-400">
+                No subjects found. Add a subject to start tracking progress.
               </p>
             </div>
           ) : (
-            // List of Progress Bars
+            // This is the ONLY place progress bars should be rendered
             subjects.map(subject => (
               <SubjectProgressBar
                 key={subject.id}
                 name={subject.name}
                 difficulty={subject.difficulty}
-                // Call the store function directly for each ID
                 progress={getSubjectProgress(subject.id)}
               />
             ))

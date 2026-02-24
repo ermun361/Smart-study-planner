@@ -10,6 +10,7 @@ const LandingPage = () => {
     const navigate = useNavigate();
     return (
         <div className="min-h-screen bg-[#cbd5e1] text-slate-900">
+            {/*1. Navbar */}
             <nav className="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-[#5e5ce6] rounded-xl flex items-center justify-center text-white">
@@ -19,8 +20,9 @@ const LandingPage = () => {
                 </div>
                 <button className="bg-slate-400/40 px-8 py-2 rounded-xl font-bold">Login</button>
             </nav>
+            {/*2. Main Content */}
             <main className="max-w-7xl mx-auto px-8 pt-12 grid lg:grid-cols-2 items-center">
-                <div className="space-y-8">
+                <div className="space-y-8 text-left">
                     <h1 className="text-6xl md:text-8xl font-bold text-slate-950 leading-[0.9] tracking-tighter">
                         Smart Study <br /> Planner
                     </h1>
@@ -34,15 +36,13 @@ const LandingPage = () => {
                     </button>
                 </div>
 
-                <div className="relative bg-white p-2 rounded-[2.5rem] shadow-2xl border-4 border-white/50 overflow-hidden transform lg:rotate-2 group-hover:rotate-0 transition-transform duration-700">
+                <div className="scale-90 lg:scale-100 lg:-rotate-6 bg-white p-3 rounded-[3rem] shadow-2xl border-2 border-white/50 transition-all duration-700 hover:rotate-0">
                     <img 
                     src="src\assets\Images\Screenshot 2026-02-24 122705.png"
                      alt="dashboard mock up"
                      className="rounded-[2rem] w-full h-auto object-cover"
                     />
-                </div>
-
-                
+                </div> 
             </main>
             
         </div>

@@ -39,7 +39,7 @@ const ProgressPage = () => {
         />
         <StatsCard
           title="Study Streak"
-          value="4 Days"
+          value="2 Days"
           icon={<Award size={32} />}
           bgColor="bg-orange-50"
           iconColor="text-orange-500"

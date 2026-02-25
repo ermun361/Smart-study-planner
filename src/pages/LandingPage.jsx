@@ -2,14 +2,18 @@ import React from 'react';
 import { Book } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
-import MiniCalendar from '../components/MiniCalendar';
-
-
-
 
 const LandingPage = () => {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     const navigate = useNavigate();
+
+     const handleStartClick = () => {
+        if (isAuthenticated) {
+            navigate('/dashboard');
+        } else {
+            navigate('/login');
+        }
+    };
     return (
         <div className="min-h-screen bg-[#cbd5e1] text-slate-900">
             {/*1. Navbar */}
@@ -20,12 +24,16 @@ const LandingPage = () => {
                     </div>
                     <span className="font-bold text-xl">Smart Planner</span>
                 </div>
+
+                {/* Navbar Auth Toggle */}
                 <button 
                     onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
                     className="bg-slate-400/30 px-8 py-2 rounded-xl font-bold">
                     {isAuthenticated ? 'Dashboard' : 'Login'}
                 </button>
             </nav>
+
+
             {/*2. Main Content */}
             <main className="max-w-7xl mx-auto px-8 pt-12 grid lg:grid-cols-2 items-center">
                 <div className="space-y-8 text-left">
@@ -36,9 +44,9 @@ const LandingPage = () => {
                         Plan your studies intelligently and stay on track.
                     </p>
                     <button 
-                    onClick={() => navigate('/dashboard')}
-                    className="bg-[#5e5ce6] text-white text-2xl font-bold px-12 py-5 rounded-3xl shadow-2xl">
-                        Get Started
+                    onClick={handleStartClick}
+                        className="bg-[#5e5ce6] hover:bg-[#4d4bc4] text-white text-2xl font-bold px-12 py-5 rounded-3xl shadow-2xl transition-all active:scale-95 w-full md:w-auto">
+                        {isAuthenticated ? 'Go to Dashboard' : 'Get Started'}
                     </button>
                 </div>
 

@@ -42,9 +42,11 @@ This application automates the planning process. By inputting subjects and deadl
 - [x] Engineered Mobile Responsiveness across all views using adaptive grids and touch-friendly components.
 
 ### Week 3: Analytics & Polish ⏳
-- [ ] Create the Progress Analytics dashboard.
-- [ ] Integrate the Motivation API.
-- [ ] Final UI/UX refinements, Framer Motion animations, and deployment.
+- [x] **Weighted Progress Engine:** Engineered a point-based analytics system to prioritize high-effort subjects.
+- [x] **Authentication & Guarding:** Implemented a secure-route architecture and custom Login/Sign-up UI.
+- [x] **Gamification Logic:** Developed a consecutive study streak algorithm using `date-fns`.
+- [x] **Product Landing Page:** Created a high-end, responsive landing page with mobile-optimized layouts.
+- [x] **Humanized UI/UX:** Refined components with micro-animations, pulse effects, and consistent branding.
 
 ## ⚙️ Installation & Setup
 

@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { generateSmartTasks } from '../utils/smartEngine';
-import { addDays, format, parseISO } from 'date-fns';
+import { addDays, format, parseISO, subDays, differenceInDays } from 'date-fns';
+
 
 const DIFFICULTY_WEIGHTS = {
   Hard: 3,   // 1 task in a Hard subject = 3 points
@@ -77,9 +78,10 @@ export const useSubjectStore = create(
         const { tasks, subjects } = get();
         
         if (tasks.length === 0) {
-          return { total: 0, completed: 0, percent: 0 };
+          return { total: 0, completed: 0, percent: 0, streak: 0 };
         }
 
+        // --- 1. WEIGHTED PROGRESS CALCULATION ---
         let totalWeightedPoints = 0;
         let earnedWeightedPoints = 0;
 
@@ -99,7 +101,6 @@ export const useSubjectStore = create(
             earnedWeightedPoints += weight;
           }
         });
-
        
         return {
           total: tasks.length,

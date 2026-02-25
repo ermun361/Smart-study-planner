@@ -19,14 +19,19 @@ This application automates the planning process. By inputting subjects and deadl
 - **External API:** Advice Slip API (Daily Motivation)
 
 ## ✨ Core Features
-- **Intelligent Dashboard:** View daily tasks, upcoming exams, and a motivational "Hero" section.
-- **Dynamic Task Generator:** Automatically creates study sessions based on a subject's difficulty rating (Easy, Medium, Hard).
-- **Interactive Calendar:** A visual overview of deadlines and daily study loads with smart status indicators.
-- **Subject Manager:** Full CRUD (Create, Read, Update, Delete) capability for managing your curriculum.
-- **Task Interaction:** Ability to "Complete" or "Skip" study sessions, with skip logic automatically rescheduling tasks.
-- **Persistent Data:** Your study plan stays with you—even after a page refresh—thanks to Zustand Local Storage integration.
+## ✨ Core Features
 
-## 📅 Roadmap (3-Week Sprint)
+*   **Modern Landing Page (New):** A high-conversion homepage featuring a 3D-tilted dashboard mockup and responsive "Gatekeeper" access logic.
+*   **Secure Authentication (New):** A full Login/Sign-up flow with protected routes that prevent unauthorized access to user data.
+*   **Weighted Analytics Dashboard (New):** Advanced progress tracking that weights "Hard" subjects (3pts) more heavily than "Easy" ones for a true reflection of effort.
+*   **Gamified Study Streaks (New):** A logic-driven streak engine that tracks consecutive days of task completion with visual "fire" (🔥) rewards.
+*   **Intelligent Dashboard:** View daily tasks, upcoming exams, and a motivational "Hero" section (Now integrated with weighted stats).
+*   **Dynamic Task Generator:** Automatically creates study sessions based on a subject's difficulty rating (Easy, Medium, Hard).
+*   **Subject Manager:** Full CRUD (Create, Read, Update, Delete) capability for managing your curriculum.
+*   **Task Interaction:** Ability to "Complete" or "Skip" study sessions, with skip logic automatically rescheduling tasks.
+*   **Persistent Data:** Your study plan and login sessions stay with you—even after a page refresh—thanks to Zustand Persistence.
+
+## 📅 Roadmap 
 
 ### Week 1: Foundation & CRUD ✅
 - [x] Project setup and theme configuration.
@@ -46,7 +51,7 @@ This application automates the planning process. By inputting subjects and deadl
 - [x] **Authentication & Guarding:** Implemented a secure-route architecture and custom Login/Sign-up UI.
 - [x] **Gamification Logic:** Developed a consecutive study streak algorithm using `date-fns`.
 - [x] **Product Landing Page:** Created a high-end, responsive landing page with mobile-optimized layouts.
-- [x] **Humanized UI/UX:** Refined components with micro-animations, pulse effects, and consistent branding.
+- [x] **Humanized UI/UX:** Refined components with  consistent branding.
 
 ## ⚙️ Installation & Setup
 

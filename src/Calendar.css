@@ -41,18 +41,23 @@
   color: #374151;
 }
 
-/* THE DOT: This is our Smart Indicator */
-.task-dot {
-  height: 6px;
-  width: 6px;
-  background-color: #6366f1; /* purple dot */
+/* Custom Circle for Exam Days */
+.exam-day-tile abbr {
+  border: 2px solid #dc2626; /* red-600 */
   border-radius: 50%;
-  margin-top: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  color: #dc2626 !important;
+  font-weight: 900 !important;
+  background-color: #fef2f2; /* red-50 */
 }
 
-.exam-dot {
-  background-color: #242121 !important; /* Red dot for exams */
-  width: 20px !important;
-  height: 2px !important;
-  border-radius: 2px !important;
+/* Remove default hover effect for exam days to keep the circle clean */
+.exam-day-tile:enabled:hover,
+.exam-day-tile:enabled:focus {
+  background: transparent !important;
 }

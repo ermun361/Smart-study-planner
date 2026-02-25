@@ -1,6 +1,5 @@
 import React, { useState } from 'react'; // 1. Added useState
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-
 import { useAuthStore } from './store/useAuthStore';
 
 // LAYOUT & PAGES
@@ -13,12 +12,10 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 
 // Placeholders for pages NOT yet built 
-const SettingsPage = () => <div className="p-8 text-2xl font-bold italic text-gray-400">Preferences (Week 3)</div>;
+const SettingsPage = () => <div className="p-8 text-2xl font-bold italic text-gray-400">Preferences (later)</div>;
 
 function App() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-
-
 
   // The Modal state 
   const [isModalOpen, setIsModalOpen] = useState(false);

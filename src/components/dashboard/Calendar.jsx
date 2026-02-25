@@ -8,20 +8,39 @@ import { useSubjectStore } from "../../store/useSubjectStore";
 const SmartCalendar = ({ onDateChange, selectedDate }) => {
   const { tasks } = useSubjectStore();
 
-  // This function draws the dots on the tiles
+  // 1. LOGIC: Add a CSS class if the day is an Exam Day
+  const getTileClassName = ({ date, view }) => {
+    if (view === 'month') {
+      const dateStr = format(date, 'yyyy-MM-dd');
+      const hasExam = tasks.some((t) => t.date === dateStr && t.isExam);
+      return hasExam ? 'exam-day-tile' : null;
+    }
+    return null;
+  };
+
+  // 2. LOGIC: Draw ONLY the study dots (since the exam is now a circle)
   const getTileContent = ({ date, view }) => {
     if (view === 'month') {
       const dateStr = format(date, 'yyyy-MM-dd');
-      
-      // Look for tasks or exams on this specific day
       const dayTasks = tasks.filter((t) => t.date === dateStr);
-      const hasExam = dayTasks.some((t) => t.isExam);
-      const hasStudySession = dayTasks.some((t) => !t.isExam);
+      
+      // Filter for study sessions only (exclude exams)
+      const studySessions = dayTasks.filter((t) => !t.isExam);
+
+      if (studySessions.length === 0) return null;
 
       return (
-        <div className="flex flex-col items-center justify-center h-1 mt-1">
-          {hasExam && <div className="exam-dot" title="Exam Day" />}
-          {hasStudySession && !hasExam && <div className="task-dot" title="Study Session" />}
+        <div className="flex flex-wrap justify-center gap-0.5 mt-1 max-w-[20px] mx-auto">
+          {studySessions.map((_, index) => (
+            <div 
+              key={index} 
+              className={`w-1 h-1 rounded-full ${
+                studySessions.length >= 4 ? 'bg-red-400' : 
+                studySessions.length >= 2 ? 'bg-orange-400' : 
+                'bg-green-400'
+              }`}
+            />
+          ))}
         </div>
       );
     }
@@ -29,14 +48,15 @@ const SmartCalendar = ({ onDateChange, selectedDate }) => {
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-4 lg:p-6">
+    <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-4 lg:p-6 overflow-hidden">
       <Calendar
         onChange={onDateChange}
         value={selectedDate}
-        tileContent={getTileContent}
-        className="mx-auto"
-        next2Label={null} // Cleaner UI
-        prev2Label={null} // Cleaner UI
+        tileClassName={getTileClassName} // THE CIRCLE LOGIC
+        tileContent={getTileContent}     // THE DOTS LOGIC
+        className="mx-auto border-none w-full"
+        next2Label={null}
+        prev2Label={null}
       />
     </div>
   );

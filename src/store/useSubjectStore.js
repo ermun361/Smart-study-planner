@@ -63,9 +63,15 @@ export const useSubjectStore = create(
 
       getSubjectProgress: (subjectId) => {
         const { tasks } = get();
-        const subjectTasks = tasks.filter((t) => t.subjectId === subjectId);
+        
+        // 1. FILTER: Only count study sessions, ignore the 'Exam' marker
+        const subjectTasks = tasks.filter((t) => t.subjectId === subjectId && !t.isExam);
+        
         if (subjectTasks.length === 0) return 0;
+
+        // 2. MATH: How many of these STUDY tasks are done?
         const completed = subjectTasks.filter((t) => t.completed).length;
+        
         return Math.round((completed / subjectTasks.length) * 100);
       },
 
@@ -75,40 +81,52 @@ export const useSubjectStore = create(
        * Used for the main stats cards at the top of the Progress Page.
        */
       getStats: () => {
-        const { tasks, subjects } = get();
-        
-        if (tasks.length === 0) {
-          return { total: 0, completed: 0, percent: 0, streak: 0 };
-        }
+  const { tasks, subjects } = get();
+  
+  // 1. Filter out the Exam markers. We only care about study sessions for progress.
+  const studyTasks = tasks.filter(t => !t.isExam);
+  
+  if (studyTasks.length === 0) {
+    return { total: 0, completed: 0, percent: 0, streak: 0 };
+  }
 
-        // --- 1. WEIGHTED PROGRESS CALCULATION ---
-        let totalWeightedPoints = 0;
-        let earnedWeightedPoints = 0;
+  let totalWeightedPoints = 0;
+  let earnedWeightedPoints = 0;
 
-        // Loop through all tasks to calculate weighted progress
-        tasks.forEach((task) => {
-          // Find the subject this task belongs to
-          const parentSubject = subjects.find((s) => s.id === task.subjectId);
-          
-          // Determine the weight based on subject difficulty
-          const weight = DIFFICULTY_WEIGHTS[parentSubject?.difficulty] || 1;
+  studyTasks.forEach((task) => {
+    const parentSubject = subjects.find((s) => s.id === task.subjectId);
+    
+    // If the subject exists, get its weight. Otherwise, skip this task.
+    if (parentSubject) {
+      const weight = DIFFICULTY_WEIGHTS[parentSubject.difficulty] || 1;
+      totalWeightedPoints += weight;
 
-          // Add to the total "Points" possible
-          totalWeightedPoints += weight;
+      if (task.completed) {
+        earnedWeightedPoints += weight;
+      }
+    }
+  });
 
-          // If the task is finished, add the "Points" to the earned tally
-          if (task.completed) {
-            earnedWeightedPoints += weight;
-          }
-        });
-       
-        return {
-          total: tasks.length,
-          completed: tasks.filter((t) => t.completed).length,
-          // Weighted percentage calculation
-          percent: Math.round((earnedWeightedPoints / totalWeightedPoints) * 100)
-        };
-      },
+  // Prevent division by zero
+  const percent = totalWeightedPoints > 0 
+    ? Math.round((earnedWeightedPoints / totalWeightedPoints) * 100) 
+    : 0;
+
+  // --- STREAK LOGIC (Keep your existing streak code here) ---
+  const completedDates = [...new Set(
+    tasks.filter(t => t.completed).map(t => t.date)
+  )].sort((a, b) => b.localeCompare(a));
+  
+  let streak = 0;
+  // ... (rest of your streak logic)
+
+  return {
+    total: studyTasks.length,
+    completed: studyTasks.filter((t) => t.completed).length,
+    percent: percent,
+    streak: streak
+  };
+},
     }),
     {
       name: 'smart-planner-storage',

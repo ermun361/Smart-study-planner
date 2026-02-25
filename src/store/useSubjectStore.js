@@ -41,12 +41,17 @@ export const useSubjectStore = create(
         set({ subjects: updatedSubjects, tasks: generateSmartTasks(updatedSubjects) });
       },
       // --- SKIP TASK (Moves it to the next day) ---
+      // --- SKIP TASK (Moves it to the next day) ---
       skipTask: (taskId) => {
         set((state) => ({
           tasks: state.tasks.map((t) => {
             if (t.id === taskId) {
               const nextDay = addDays(parseISO(t.date), 1);
-              return { ...t, date: format(nextDay, 'yyyy-MM-dd') };
+              return { 
+                ...t, 
+                date: format(nextDay, 'yyyy-MM-dd'),
+                completed: false // <--- ADD THIS: Ensures the task is "new" for tomorrow
+              };
             }
             return t;
           }),

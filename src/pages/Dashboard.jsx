@@ -109,7 +109,7 @@ const Dashboard = ({ onAddClick }) => {
                           e.stopPropagation(); 
                           skipTask(task.id);
                         }}
-                        className="opacity-0 group-hover:opacity-100 flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-50 text-brandPurple text-[10px] font-bold uppercase transition-all hover:bg-brandPurple hover:text-white"
+                        className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-50 text-brandPurple text-[10px] font-bold uppercase transition-all hover:bg-brandPurple hover:text-white"
                         title="Move to tomorrow"
                       >
                         <Forward size={12} />

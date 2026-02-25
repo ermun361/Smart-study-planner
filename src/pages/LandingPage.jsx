@@ -2,7 +2,6 @@ import React from 'react';
 import { Book } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
-import dashboardImg from '../assets/Images/dashboard-mockup.png';
 
 const LandingPage = () => {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -53,7 +52,7 @@ const LandingPage = () => {
 
                 <div className="scale-90 lg:scale-100 lg:-rotate-6 bg-white p-3 rounded-[3rem] shadow-2xl border-2 border-white/50 transition-all duration-700 hover:rotate-0">
                     <img 
-                    src={dashboardImg}
+                    src="/dashboard-mockup.png"
                      alt="dashboard mock up"
                      className="rounded-[2rem] w-full h-auto object-cover"
                     />

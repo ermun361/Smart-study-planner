@@ -8,7 +8,6 @@ import { useSubjectStore } from "../../store/useSubjectStore";
 const SmartCalendar = ({ onDateChange, selectedDate }) => {
   const { tasks } = useSubjectStore();
 
-  // 1. LOGIC: Add a CSS class if the day is an Exam Day
   const getTileClassName = ({ date, view }) => {
     if (view === 'month') {
       const dateStr = format(date, 'yyyy-MM-dd');
@@ -18,7 +17,7 @@ const SmartCalendar = ({ onDateChange, selectedDate }) => {
     return null;
   };
 
-  // 2. LOGIC: Draw ONLY the study dots (since the exam is now a circle)
+  
   const getTileContent = ({ date, view }) => {
     if (view === 'month') {
       const dateStr = format(date, 'yyyy-MM-dd');
@@ -52,8 +51,8 @@ const SmartCalendar = ({ onDateChange, selectedDate }) => {
       <Calendar
         onChange={onDateChange}
         value={selectedDate}
-        tileClassName={getTileClassName} // THE CIRCLE LOGIC
-        tileContent={getTileContent}     // THE DOTS LOGIC
+        tileClassName={getTileClassName} 
+        tileContent={getTileContent}    
         className="mx-auto border-none w-full"
         next2Label={null}
         prev2Label={null}

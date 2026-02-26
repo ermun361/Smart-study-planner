@@ -84,7 +84,7 @@ const SubjectsPage = ({ onAddClick }) => {
                     </span>
                     
                     <div className="flex items-center gap-2">
-                        {/* EDIT ICON - Now connected! */}
+                        {/* EDIT ICON  */}
                         <button 
                           onClick={() => setEditingSubject(s)} 
                           className="p-2 text-gray-400 hover:text-brandPurple transition-colors"
@@ -114,7 +114,7 @@ const SubjectsPage = ({ onAddClick }) => {
         )}
       </div>
 
-      {/* EDIT MODAL - Shows up when editingSubject is not null */}
+      {/* EDIT MODAL  */}
       {editingSubject && (
         <AddSubjectModal 
           editingSubject={editingSubject} 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom'; // 1. Added useNavigate
-import { useAuthStore } from '../store/useAuthStore'; // 2. Added useAuthStore
+import { NavLink, useNavigate } from 'react-router-dom'; 
+import { useAuthStore } from '../store/useAuthStore'; 
 import {
   LayoutDashboard, 
   BookOpen, 
@@ -18,10 +18,12 @@ const Sidebar = ({ isMenuOpen, toggleMenu }) => {
   
   // 4. Logout Handler
   const handleLogout = () => {
-    logout(); // This clears the user and token from localStorage
-    navigate('/'); // Redirect back to Landing Page
-    if (isMenuOpen) toggleMenu(); // Close mobile menu if it was open
-  };
+  logout(); 
+  // Use 'replace: true' so the user can't hit the "Back" button to return to the dashboard
+  navigate('/', { replace: true }); 
+  // Redirect back to Landing Page
+      if (isMenuOpen) toggleMenu(); // Close mobile menu if it was open
+    };
 
   const navLinkClass = ({ isActive }) => 
     `flex items-center gap-3 p-3 rounded-xl transition-all ${

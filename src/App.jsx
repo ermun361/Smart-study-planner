@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // 1. Added useState
+import React, { useState } from 'react'; 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore';
 
@@ -11,7 +11,6 @@ import ProgressPage from './pages/ProgressPage';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 
-// Placeholders for pages NOT yet built 
 const SettingsPage = () => <div className="p-8 text-2xl font-bold italic text-gray-400">Preferences (later)</div>;
 
 function App() {
@@ -29,7 +28,6 @@ function App() {
 
         {/* --- 2. PRIVATE APP ROUTES */}
         <Route element={isAuthenticated ? <MainLayout /> : <Navigate to="/login" replace />}>
-          {/* We remove the Navigate from "/" so it doesn't skip the Landing Page */}
           
           <Route 
             path="/dashboard" 
@@ -46,7 +44,6 @@ function App() {
         </Route>
 
         {/* --- 3. CATCH-ALL REDIRECT --- */}
-        {/* If a user goes to a page that doesn't exist, send them home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 

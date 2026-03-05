@@ -40,7 +40,7 @@ export const useSubjectStore = create(
         // Regenerate tasks because data changed
         set({ subjects: updatedSubjects, tasks: generateSmartTasks(updatedSubjects) });
       },
-      // --- SKIP TASK (Moves it to the next day) ---
+      
       // --- SKIP TASK (Moves it to the next day) ---
       skipTask: (taskId) => {
         set((state) => ({
@@ -50,7 +50,7 @@ export const useSubjectStore = create(
               return { 
                 ...t, 
                 date: format(nextDay, 'yyyy-MM-dd'),
-                completed: false // <--- ADD THIS: Ensures the task is "new" for tomorrow
+                completed: false 
               };
             }
             return t;
@@ -83,7 +83,6 @@ export const useSubjectStore = create(
       
       /**
        * UPDATED: GET TOTAL STATS (WEIGHTED)
-       * Used for the main stats cards at the top of the Progress Page.
        */
       getStats: () => {
   const { tasks, subjects } = get();
@@ -123,7 +122,6 @@ export const useSubjectStore = create(
   )].sort((a, b) => b.localeCompare(a));
   
   let streak = 0;
-  // ... (rest of your streak logic)
 
   return {
     total: studyTasks.length,

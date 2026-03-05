@@ -3,7 +3,7 @@ import { useSubjectStore } from '../store/useSubjectStore';
 import SmartCalendar from '../components/dashboard/Calendar';
 import { fetchMotivation, getLocalQuote } from '../utils/motivationApi';
 import { CheckCircle2, Circle, Forward, Quote } from 'lucide-react';
-import { format } from 'date-fns'; // We use this to match calendar dates to task dates
+import { format } from 'date-fns'; 
 
 const Dashboard = ({ onAddClick }) => {
   const { tasks, toggleTask,skipTask } = useSubjectStore();
@@ -15,7 +15,6 @@ const Dashboard = ({ onAddClick }) => {
   useEffect(() => {
     const getQuote = async () => {
       const dailyQuote = await fetchMotivation();
-      // Only update if the API actually returned something different
       setQuote(dailyQuote);
     };
     getQuote();
@@ -32,7 +31,6 @@ const Dashboard = ({ onAddClick }) => {
       
       {/* --- PREMIUM HERO QUOTE SECTION --- */}
       <div className="w-full bg-gradient-to-br from-brandPurple to-indigo-600 p-8 lg:p-12 rounded-[2.5rem] shadow-xl shadow-indigo-100 text-center mb-10 relative overflow-hidden group">
-        {/* Decorative background circle */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl transition-all group-hover:scale-150 duration-700"></div>
         
         <div className="relative z-10 flex flex-col items-center">

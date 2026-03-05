@@ -66,7 +66,6 @@ const ProgressPage = () => {
               </p>
             </div>
           ) : (
-            // This is the ONLY place progress bars should be rendered
             subjects.map(subject => (
               <SubjectProgressBar
                 key={subject.id}

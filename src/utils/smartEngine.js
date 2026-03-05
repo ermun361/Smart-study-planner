@@ -8,7 +8,7 @@ export const generateSmartTasks = (subjects) => {
     const examDate = startOfDay(parseISO(subject.examDate));
     const daysUntil = differenceInDays(examDate, today);
 
-    // --- 1. NEW 4-2-1 INTENSITY LOGIC ---
+    // --- 1. 4-2-1 INTENSITY LOGIC ---
     let sessionsPerDay = 1;
     let interval = 1; // By default, study every day
 
@@ -18,7 +18,7 @@ export const generateSmartTasks = (subjects) => {
       sessionsPerDay = 2; // 2 Sessions every day
     } else {
       sessionsPerDay = 1; // 1 Session every day
-      interval = 2;       // For Easy, maybe study every other day
+      interval = 2;       
     }
 
     // --- 2. GENERATE TASKS ---

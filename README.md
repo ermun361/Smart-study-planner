@@ -19,7 +19,6 @@ This application automates the planning process. By inputting subjects and deadl
 - **External API:** Advice Slip API (Daily Motivation)
 
 ## ✨ Core Features
-## ✨ Core Features
 
 *   **Modern Landing Page (New):** A high-conversion homepage featuring a 3D-tilted dashboard mockup and responsive "Gatekeeper" access logic.
 *   **Secure Authentication (New):** A full Login/Sign-up flow with protected routes that prevent unauthorized access to user data.
@@ -49,7 +48,6 @@ This application automates the planning process. By inputting subjects and deadl
 ### Week 3: Analytics & Polish ⏳
 - [x] **Weighted Progress Engine:** Engineered a point-based analytics system to prioritize high-effort subjects.
 - [x] **Authentication & Guarding:** Implemented a secure-route architecture and custom Login/Sign-up UI.
-- [x] **Gamification Logic:** Developed a consecutive study streak algorithm using `date-fns`.
 - [x] **Product Landing Page:** Created a high-end, responsive landing page with mobile-optimized layouts.
 - [x] **Humanized UI/UX:** Refined components with  consistent branding.
 

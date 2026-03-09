@@ -27,7 +27,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
 
         {/* --- 2. PRIVATE APP ROUTES */}
-        <Route element={isAuthenticated ? <MainLayout /> : <Navigate to="/login" replace />}>
+        <Route element={isAuthenticated ? <MainLayout /> : <Navigate to="/" replace />}>
           
           <Route 
             path="/dashboard" 

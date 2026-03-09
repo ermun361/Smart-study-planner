@@ -31,7 +31,7 @@ const SubjectsPage = ({ onAddClick }) => {
             />
           </div>
           <div className="w-10 h-10 rounded-full bg-brandPurple flex items-center justify-center text-white shadow-sm border-2 border-white font-bold text-xs">
-            JD
+            ES
           </div>
         </div>
       </div>

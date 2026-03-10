@@ -1,7 +1,7 @@
 import React, { useState } from 'react'; 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 // import { useAuthStore } from './store/useAuthStore';
-import { useAuthStore } from '../src/store/useSupabaseAuthStore'; 
+import { useAuthStore } from '../src/store/useSupabaseAuthStore';
 
 // LAYOUT & PAGES
 import MainLayout from './layout/MainLayout';

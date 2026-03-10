@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // 1. Point this to your NEW Supabase store file
-import { useAuthStore } from '../store/useSupabaseAuthStore'; 
+import { useAuthStore } from '../store/useSupabaseAuthStore'
 import { Book, Mail, Lock, User } from 'lucide-react';
 
 const LoginPage = () => {

@@ -62,5 +62,32 @@ export const useSubjectStore = create((set, get) => ({
       tasks: [...state.tasks, ...savedTasks]
     }));
   },
+
+  // Add these inside the store
+  toggleTask: async (taskId) => {
+    const task = get().tasks.find(t => t.id === taskId);
+    const { error } = await supabase
+      .from('tasks')
+      .update({ completed: !task.completed })
+      .eq('id', taskId);
+
+    if (!error) {
+      set((state) => ({
+        tasks: state.tasks.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t)
+      }));
+    }
+  },
+
+  deleteSubject: async (id) => {
+    // HUMAN LOGIC: "If I delete the parent, the children (tasks) die with it automatically in the DB."
+    const { error } = await supabase.from('subjects').delete().eq('id', id);
+    
+    if (!error) {
+      set((state) => ({
+        subjects: state.subjects.filter(s => s.id !== id),
+        tasks: state.tasks.filter(t => t.subject_id !== id)
+      }));
+    }
+  },
  
 }));

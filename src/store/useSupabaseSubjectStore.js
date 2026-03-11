@@ -32,4 +32,35 @@ export const useSubjectStore = create((set, get) => ({
       loading: false 
     });
   },
+
+  // Add this inside the store from Stage 1
+  addSubject: async (newSubjectData) => {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    // 1. Tell the Database: "Hey, save this new subject for me."
+    const { data: savedSubject, error: subError } = await supabase
+      .from('subjects')
+      .insert([{ ...newSubjectData, user_id: user.id }])
+      .select().single();
+
+    if (subError) throw subError;
+
+    // 2. Tell the Smart Engine: "Now that we have a real subject, plan some tasks for it."
+    const newTasks = generateSmartTasks([savedSubject]);
+
+    // 3. Tell the Database: "Now save all those planned tasks too."
+    const { data: savedTasks, error: taskError } = await supabase
+      .from('tasks')
+      .insert(newTasks.map(t => ({ ...t, user_id: user.id, subject_id: savedSubject.id })))
+      .select();
+
+    if (taskError) throw taskError;
+
+    // 4. Update the App: "Everything is saved in the cloud, show it on the screen now."
+    set((state) => ({
+      subjects: [savedSubject, ...state.subjects],
+      tasks: [...state.tasks, ...savedTasks]
+    }));
+  },
+ 
 }));

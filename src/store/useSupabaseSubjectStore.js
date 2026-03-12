@@ -1,71 +1,108 @@
 import { create } from 'zustand';
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from './supabaseClient'; 
+import { generateSmartTasks } from '../utils/smartEngine'; 
+import { addDays, format, parseISO } from 'date-fns';
+
+const DIFFICULTY_WEIGHTS = {
+  Hard: 3,
+  Medium: 2,
+  Easy: 1
+};
 
 export const useSubjectStore = create((set, get) => ({
-  // THE BRAIN'S MEMORY: Start with empty lists
   subjects: [],
   tasks: [],
   loading: false,
 
-  // THE ACTION: "Go fetch my stuff from the cloud"
   fetchInitialData: async () => {
-    // 1. TELL THE UI: "Hang on, I'm headed to the warehouse now."
     set({ loading: true });
-    
-    // 2. MULTITASK: Instead of going to the warehouse twice, 
-    // we ask for both 'Subjects' and 'Tasks' at the same exact time.
-    const [subjectResponse, taskResponse] = await Promise.all([
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return set({ loading: false });
+
+    const [subRes, taskRes] = await Promise.all([
       supabase.from('subjects').select('*').order('created_at', { ascending: false }),
       supabase.from('tasks').select('*').order('date', { ascending: true })
     ]);
 
-    // 3. CHECK THE BOXES: Did we get our data? If not, use an empty list.
-    const freshSubjects = subjectResponse.data || [];
-    const freshTasks = taskResponse.data || [];
+    const mappedSubjects = (subRes.data || []).map(s => ({
+      ...s,
+      examDate: s.exam_date,
+      // FORCE ID TO STRING
+      id: String(s.id) 
+    }));
 
-    // 4. UNPACK: Take that data and put it into the brain's memory (the state).
-    set({ 
-      subjects: freshSubjects, 
-      tasks: freshTasks, 
-      
-      // 5. FINISHED: "I'm back! You can stop showing the loading spinner now."
-      loading: false 
-    });
+    const mappedTasks = (taskRes.data || []).map(t => ({
+      ...t,
+      date: t.date,
+      isExam: t.is_exam, 
+      id: t.id.toString(),
+      subjectId: String(t.subject_id), 
+      name: t.name || t.title
+    }));
+    
+    set({ subjects: mappedSubjects, tasks: mappedTasks, loading: false });
   },
 
-  // Add this inside the store from Stage 1
   addSubject: async (newSubjectData) => {
     const { data: { user } } = await supabase.auth.getUser();
-    
-    // 1. Tell the Database: "Hey, save this new subject for me."
+    if (!user) return;
+
     const { data: savedSubject, error: subError } = await supabase
       .from('subjects')
-      .insert([{ ...newSubjectData, user_id: user.id }])
+      .insert([{ 
+        name: newSubjectData.name,
+        difficulty: newSubjectData.difficulty,
+        exam_date: newSubjectData.examDate, 
+        color: newSubjectData.color || '#5e5ce6',
+        user_id: user.id 
+      }])
       .select().single();
 
     if (subError) throw subError;
 
-    // 2. Tell the Smart Engine: "Now that we have a real subject, plan some tasks for it."
-    const newTasks = generateSmartTasks([savedSubject]);
+    // Translation for the Smart Engine
+    const subjectForEngine = { 
+        ...savedSubject, 
+        examDate: savedSubject.exam_date, 
+        id: String(savedSubject.id) 
+    };
+    
+    const newTasks = generateSmartTasks([subjectForEngine]);
 
-    // 3. Tell the Database: "Now save all those planned tasks too."
     const { data: savedTasks, error: taskError } = await supabase
       .from('tasks')
-      .insert(newTasks.map(t => ({ ...t, user_id: user.id, subject_id: savedSubject.id })))
+      .insert(newTasks.map(t => ({
+        name: t.name || t.title || "Study Session",
+        date: t.date,
+        is_exam: t.isExam || false,
+        subject_id: savedSubject.id,
+        user_id: user.id
+      })))
       .select();
 
     if (taskError) throw taskError;
 
-    // 4. Update the App: "Everything is saved in the cloud, show it on the screen now."
+    const finalSubject = { ...savedSubject, examDate: savedSubject.exam_date, id: String(savedSubject.id) };
+    const finalTasks = (savedTasks || []).map(t => ({ 
+        ...t, 
+        subjectId: String(t.subject_id), 
+        isExam: t.is_exam,
+        name: t.name || t.title,
+        id: String(t.id)
+    }));
+
     set((state) => ({
-      subjects: [savedSubject, ...state.subjects],
-      tasks: [...state.tasks, ...savedTasks]
+      subjects: [finalSubject, ...state.subjects],
+      tasks: [...state.tasks, ...finalTasks]
     }));
   },
 
-  // Add these inside the store
+
+  // --- 3. DAILY ACTIONS ---
   toggleTask: async (taskId) => {
     const task = get().tasks.find(t => t.id === taskId);
+    if (!task) return;
+    
     const { error } = await supabase
       .from('tasks')
       .update({ completed: !task.completed })
@@ -78,16 +115,85 @@ export const useSubjectStore = create((set, get) => ({
     }
   },
 
-  deleteSubject: async (id) => {
-    // HUMAN LOGIC: "If I delete the parent, the children (tasks) die with it automatically in the DB."
-    const { error } = await supabase.from('subjects').delete().eq('id', id);
-    
+   updateSubject: async (id, updateData) => {
+    const { error } = await supabase
+      .from('subjects')
+      .update({
+        name: updateData.name,
+        exam_date: updateData.examDate,
+        difficulty: updateData.difficulty
+      })
+      .eq('id', id);
+
     if (!error) {
       set((state) => ({
-        subjects: state.subjects.filter(s => s.id !== id),
-        tasks: state.tasks.filter(t => t.subject_id !== id)
+        subjects: state.subjects.map(s => s.id === id ? { ...s, ...updateData } : s)
+      }));
+    } else {
+      alert("Update failed: " + error.message);
+    }
+  },
+
+  skipTask: async (taskId) => {
+    const task = get().tasks.find(t => t.id === taskId);
+    if (!task) return;
+
+    const nextDay = addDays(parseISO(task.date), 1);
+    const formattedDate = format(nextDay, 'yyyy-MM-dd');
+
+    const { error } = await supabase
+      .from('tasks')
+      .update({ date: formattedDate, completed: false })
+      .eq('id', taskId);
+
+    if (!error) {
+      set((state) => ({
+        tasks: state.tasks.map(t => t.id === taskId ? { ...t, date: formattedDate, completed: false } : t)
       }));
     }
   },
- 
+
+  deleteSubject: async (id) => {
+    const { error } = await supabase.from('subjects').delete().eq('id', id);
+    if (!error) {
+      set((state) => ({
+        subjects: state.subjects.filter(s => s.id !== id),
+        tasks: state.tasks.filter(t => t.subjectId !== id && t.subject_id !== id)
+      }));
+    }
+  },
+
+  // --- 4. ANALYTICS (Logic for your Progress Charts & Points) ---
+  getSubjectProgress: (subjectId) => {
+    const { tasks } = get();
+    const subjectTasks = tasks.filter((t) => (t.subjectId === subjectId || t.subject_id === subjectId) && !t.isExam);
+    if (subjectTasks.length === 0) return 0;
+    const completed = subjectTasks.filter((t) => t.completed).length;
+    return Math.round((completed / subjectTasks.length) * 100);
+  },
+
+  getStats: () => {
+    const { tasks, subjects } = get();
+    const studyTasks = tasks.filter(t => !t.isExam);
+    if (studyTasks.length === 0) return { total: 0, completed: 0, percent: 0, streak: 0 };
+
+    let totalPoints = 0;
+    let earnedPoints = 0;
+
+    studyTasks.forEach((task) => {
+      const parent = subjects.find((s) => s.id === task.subjectId || s.id === task.subject_id);
+      if (parent) {
+        const weight = DIFFICULTY_WEIGHTS[parent.difficulty] || 1;
+        totalPoints += weight;
+        if (task.completed) earnedPoints += weight;
+      }
+    });
+
+    return {
+      total: studyTasks.length,
+      completed: studyTasks.filter(t => t.completed).length,
+      percent: totalPoints > 0 ? Math.round((earnedPoints / totalPoints) * 100) : 0,
+      streak: [...new Set(tasks.filter(t => t.completed).map(t => t.date))].length
+    };
+  }
 }));

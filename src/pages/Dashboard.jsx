@@ -1,43 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { useSubjectStore } from '../store/useSubjectStore';
+import { useSubjectStore } from '../store/useSupabaseSubjectStore';
 import SmartCalendar from '../components/dashboard/Calendar';
 import { fetchMotivation, getLocalQuote } from '../utils/motivationApi';
 import { CheckCircle2, Circle, Forward, Quote } from 'lucide-react';
 import { format } from 'date-fns'; 
 
 const Dashboard = ({ onAddClick }) => {
-  const { tasks, toggleTask,skipTask } = useSubjectStore();
+  const { tasks, subjects, toggleTask, skipTask, fetchInitialData } = useSubjectStore();
   const [selectedDate, setSelectedDate] = useState(new Date());
+  
+  // Initialize quote with the text property correctly
+  const [quote, setQuote] = useState(getLocalQuote() || { text: "Keep pushing forward!", author: "Planner" });
 
-  // Motivation state & logic
-  const [quote, setQuote] = useState(getLocalQuote());
+  useEffect(() => {
+    if (subjects.length === 0) {
+      fetchInitialData();
+    }
+  }, []);
 
   useEffect(() => {
     const getQuote = async () => {
-      const dailyQuote = await fetchMotivation();
-      setQuote(dailyQuote);
+      try {
+        const dailyQuote = await fetchMotivation();
+        if (dailyQuote) setQuote(dailyQuote);
+      } catch (err) {
+        console.log("Using backup quote");
+      }
     };
     getQuote();
   }, []);
 
-  // 1. Convert the calendar's selectedDate into a "YYYY-MM-DD" string
   const selectedDateStr = format(selectedDate, 'yyyy-MM-dd');
-
-  // 2. Filter tasks so we ONLY show ones for the date clicked on the calendar
   const filteredTasks = tasks.filter((task) => task.date === selectedDateStr);
 
  return (
     <div className="max-w-7xl mx-auto">
       
-      {/* --- PREMIUM HERO QUOTE SECTION --- */}
+      {/* --- HERO QUOTE SECTION --- */}
       <div className="w-full bg-gradient-to-br from-brandPurple to-indigo-600 p-8 lg:p-12 rounded-[2.5rem] shadow-xl shadow-indigo-100 text-center mb-10 relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl transition-all group-hover:scale-150 duration-700"></div>
         
         <div className="relative z-10 flex flex-col items-center">
           <Quote className="text-white/20 mb-4" size={40} />
-          <h2 key={quote} className="animate-fade-intext-xl lg:text-3xl font-black text-white leading-tight italic max-w-4xl">
-            "{quote}"
+          {/* FIX: Render quote.text instead of the whole object */}
+          <h2 className="animate-fade-in text-xl lg:text-3xl font-black text-white leading-tight italic max-w-4xl">
+            "{quote.text}" 
           </h2>
+          <p className="text-white/60 mt-2 font-medium">— {quote.author}</p>
           <div className="h-1 w-20 bg-white/30 rounded-full mt-6 mb-2"></div>
           <p className="text-indigo-100 text-[10px] font-bold uppercase tracking-[0.3em] opacity-80">
             Daily Academic Fuel
@@ -46,7 +55,6 @@ const Dashboard = ({ onAddClick }) => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* LEFT SIDE: Calendar */}
         <div className="lg:col-span-8">
           <SmartCalendar
             selectedDate={selectedDate} 
@@ -54,7 +62,6 @@ const Dashboard = ({ onAddClick }) => {
           />
         </div>
 
-        {/* RIGHT SIDE: Interactive Study Plan */}
         <div className="lg:col-span-4 flex flex-col gap-6">
           <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 min-h-[500px] flex flex-col">
             <div className="mb-6">
@@ -91,8 +98,9 @@ const Dashboard = ({ onAddClick }) => {
                     )}
                     
                     <div className="overflow-hidden flex-1">
+                      {/* FIX: Use task.name instead of task.title */}
                       <p className={`text-sm font-bold truncate ${task.completed ? 'line-through text-gray-400' : 'text-gray-700'}`}>
-                        {task.title}
+                        {task.name} 
                       </p>
                       {task.isExam && (
                         <span className="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded font-black uppercase">
@@ -108,7 +116,6 @@ const Dashboard = ({ onAddClick }) => {
                           skipTask(task.id);
                         }}
                         className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-50 text-brandPurple text-[10px] font-bold uppercase transition-all hover:bg-brandPurple hover:text-white"
-                        title="Move to tomorrow"
                       >
                         <Forward size={12} />
                         Skip
@@ -118,12 +125,6 @@ const Dashboard = ({ onAddClick }) => {
                 ))
               )}
             </div>
-
-            {filteredTasks.length > 0 && (
-               <p className="mt-4 text-[10px] text-center font-bold text-gray-400 uppercase tracking-widest">
-                  Tap to complete • Hover to skip
-               </p>
-            )}
           </div>
           
           <button 

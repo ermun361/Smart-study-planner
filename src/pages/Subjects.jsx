@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { useSubjectStore } from '../store/useSubjectStore';
+import React, { useState, useEffect } from 'react';
+// import { useSubjectStore } from '../store/useSubjectStore';
+import { useSubjectStore } from '../store/useSupabaseSubjectStore';
 import { Search, Edit3, Trash2, Book, Plus } from 'lucide-react';
-import AddSubjectModal from '../components/AddSubjectModal';
+// import AddSubjectModal from '../components/AddSubjectModal';
+import AddSubjectModal from '../components/SupabaseAddSubjectModal';
 
 const SubjectsPage = ({ onAddClick }) => {
   // Pull the subjects and the delete function from the store
@@ -9,6 +11,10 @@ const SubjectsPage = ({ onAddClick }) => {
 
   // local state to handle which subject to edit
   const [ editingSubject, setEditingSubject ] = useState(null);
+
+//   useEffect(() => {
+//    if (subjects.length === 0) fetchInitialData();
+// }, []);
 
    return (
     <div className="flex flex-col h-full">

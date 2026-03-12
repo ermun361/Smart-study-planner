@@ -1,5 +1,6 @@
 import React from 'react';
-import { useSubjectStore } from '../store/useSubjectStore';
+// import { useSubjectStore } from '../store/useSubjectStore';
+import { useSubjectStore } from '../store/useSupabaseSubjectStore';
 import { TrendingUp, CheckCircle2, Award, BookOpen, PlusCircle } from 'lucide-react';
 import StatsCard from '../components/StatsCard';
 import SubjectProgressBar from '../components/SubjectProgressBar';

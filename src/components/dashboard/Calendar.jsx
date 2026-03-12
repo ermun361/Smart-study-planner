@@ -3,7 +3,8 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import "../../Calendar.css";
 import { format } from 'date-fns';
-import { useSubjectStore } from "../../store/useSubjectStore";
+// import { useSubjectStore } from "../../store/useSubjectStore";
+import { useSubjectStore } from "../../store/useSupabaseSubjectStore"; 
 
 const SmartCalendar = ({ onDateChange, selectedDate }) => {
   const { tasks } = useSubjectStore();

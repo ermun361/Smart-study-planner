@@ -37,9 +37,9 @@ export const useSubjectStore = create((set, get) => ({
       isExam: t.is_exam, 
       id: t.id.toString(),
       subjectId: String(t.subject_id), 
-      name: t.name || t.title
+      name: t.name || t.title 
     }));
-    
+
     set({ subjects: mappedSubjects, tasks: mappedTasks, loading: false });
   },
 

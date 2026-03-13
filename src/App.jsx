@@ -14,8 +14,9 @@ import AddSubjectModal from './components/SupabaseAddSubjectModal';
 import ProgressPage from './pages/ProgressPage';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
+import SettingsPage from './pages/SettingsPage';
 
-const SettingsPage = () => <div className="p-8 text-2xl font-bold italic text-gray-400">Preferences (later)</div>;
+// const SettingsPage = () => <div className="p-8 text-2xl font-bold italic text-gray-400">Preferences (later)</div>;
 
 function App() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);

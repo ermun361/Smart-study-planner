@@ -77,6 +77,8 @@ const Sidebar = ({ isMenuOpen, toggleMenu }) => {
               <BarChart3 size={20} />
               <span>Progress</span>
             </NavLink>
+
+             
           </nav>
         </div>
 

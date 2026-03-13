@@ -189,6 +189,7 @@ export const useSubjectStore = create((set, get) => ({
       }
     });
 
+
     return {
       total: studyTasks.length,
       completed: studyTasks.filter(t => t.completed).length,

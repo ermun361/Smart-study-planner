@@ -53,6 +53,30 @@ export const useAuthStore = create((set, get) => ({
       return { success: false, error: error.message };
     }
   },
+  toggleTheme: async () => {
+    // Get the current state directly
+    const currentState = useAuthStore.getState();
+    const isCurrentlyDark = currentState.user?.user_metadata?.dark_mode || false;
+    const newDarkMode = !isCurrentlyDark;
+
+    // 1. Instant UI Change
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+
+    // 2. Update Supabase
+    const { data, error } = await supabase.auth.updateUser({
+      data: { dark_mode: newDarkMode }
+    });
+
+    if (!error) {
+      set({ user: data.user });
+    } else {
+      console.error("Supabase Theme Update Error:", error);
+    }
+  },
 
   uploadAvatar: async (file) => {
     set({ isLoading: true, error: null });

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom'; 
-import { useAuthStore } from '../store/useAuthStore'; 
+import { useAuthStore } from '../store/useSupabaseAuthStore';
 import {
   LayoutDashboard, 
   BookOpen, 
@@ -8,22 +8,27 @@ import {
   Settings, 
   LogOut, 
   Book,
-  X
+  X,
+  Sun,    
+  Moon   
 } from 'lucide-react';
 
 const Sidebar = ({ isMenuOpen, toggleMenu }) => {
-  // 3. Initialize hooks
-  const logout = useAuthStore((state) => state.logout);
+  // 1. Pull user and toggle function from store
+  const { user, toggleTheme, logout } = useAuthStore();
   const navigate = useNavigate();
+
+
+    console.log("Is toggleTheme a function?", typeof toggleTheme);
   
-  // 4. Logout Handler
+  // Check if dark mode is currently active
+  const isDark = user?.user_metadata?.dark_mode;
+
   const handleLogout = () => {
-  logout(); 
-  // Use 'replace: true' so the user can't hit the "Back" button to return to the dashboard
-  navigate('/', { replace: true }); 
-  // Redirect back to Landing Page
-      if (isMenuOpen) toggleMenu(); // Close mobile menu if it was open
-    };
+    logout(); 
+    navigate('/', { replace: true }); 
+    if (isMenuOpen) toggleMenu();
+  };
 
   const navLinkClass = ({ isActive }) => 
     `flex items-center gap-3 p-3 rounded-xl transition-all ${
@@ -42,10 +47,10 @@ const Sidebar = ({ isMenuOpen, toggleMenu }) => {
         />
       )}
 
-      {/* 2. THE SIDEBAR */}
+      {/* 2. THE SIDEBAR - Added dark:bg-slate-950 and transition */}
       <aside className={`
-        fixed inset-y-0 left-0 z-50 w-64 bg-brandPurple text-white flex flex-col justify-between shadow-xl
-        transition-transform duration-300 ease-in-out
+        fixed inset-y-0 left-0 z-50 w-64 bg-brandPurple dark:bg-slate-950 text-white flex flex-col justify-between shadow-xl
+        transition-all duration-300 ease-in-out
         ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} 
         lg:translate-x-0 lg:static lg:inset-0
       `}>
@@ -77,13 +82,34 @@ const Sidebar = ({ isMenuOpen, toggleMenu }) => {
               <BarChart3 size={20} />
               <span>Progress</span>
             </NavLink>
-
-             
           </nav>
         </div>
 
         {/* Bottom Section */}
-        <div className="px-4 mb-6 space-y-1">
+        <div className="px-4 mb-6 space-y-2">
+          
+          {/* --- NEW: THEME TOGGLE BUTTON --- */}
+          <button 
+            onClick={toggleTheme}
+            className="w-full flex items-center justify-between p-3 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all group"
+          >
+            <div className="flex items-center gap-3">
+              {isDark ? (
+                <Moon size={20} className="text-indigo-300" />
+              ) : (
+                <Sun size={20} className="text-yellow-400" />
+              )}
+              <span className="text-sm font-medium">
+                {isDark ? 'Dark Mode' : 'Light Mode'}
+              </span>
+            </div>
+            
+            {/* Visual Toggle Switch */}
+            <div className={`w-8 h-4 rounded-full relative transition-colors duration-300 ${isDark ? 'bg-indigo-500' : 'bg-white/20'}`}>
+              <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-transform duration-300 ${isDark ? 'translate-x-4' : 'translate-x-1'}`} />
+            </div>
+          </button>
+
           <NavLink to="/settings" onClick={isMenuOpen ? toggleMenu : null} className={navLinkClass}>
             <Settings size={20} />
             <span>Preferences</span>
@@ -92,7 +118,7 @@ const Sidebar = ({ isMenuOpen, toggleMenu }) => {
           {/* 5. LOGOUT BUTTON */}
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 p-3 text-white/50 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all mt-4 group"
+            className="w-full flex items-center gap-3 p-3 text-white/50 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all mt-2 group"
           >
             <LogOut size={20} className="group-hover:stroke-red-400" />
             <span className="font-medium group-hover:text-red-400">Log out</span>

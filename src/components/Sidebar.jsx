@@ -19,7 +19,7 @@ const Sidebar = ({ isMenuOpen, toggleMenu }) => {
   const navigate = useNavigate();
 
 
-    console.log("Is toggleTheme a function?", typeof toggleTheme);
+    // console.log("Is toggleTheme a function?", typeof toggleTheme);
   
   // Check if dark mode is currently active
   const isDark = user?.user_metadata?.dark_mode;

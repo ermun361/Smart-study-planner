@@ -12,6 +12,7 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     // Optional: Add a loading state to show the user something is happening
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     // 3. Get both login and signUp from the store
     const login = useAuthStore((state) => state.login);
@@ -21,14 +22,28 @@ const LoginPage = () => {
     // 4. Make this function 'async' because database calls take time
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setErrorMessage('');
+
+        if (!email.trim() || !password.trim()) {
+          setErrorMessage('Please enter both email and password.');
+          return;
+        }
+
+        if (isSignUp && !name.trim()) {
+          setErrorMessage('Please enter your full name to create an account.');
+          return;
+        }
+
         setLoading(true);
 
         try {
             if (isSignUp) {
                 // REAL SIGN UP
                 await signUp(email, password, name);
+                setErrorMessage('');
                 alert("Account created! Check your email for verification (if enabled) or try logging in.");
                 setIsSignUp(false); // Switch back to login view
+                setPassword('');
             } else {
                 // REAL LOGIN
                 await login(email, password);
@@ -36,10 +51,16 @@ const LoginPage = () => {
             }
         } catch (error) {
             // This will catch things like "Invalid password" or "User already exists"
-            alert(error.message);
+            setErrorMessage(error?.message || 'Authentication failed. Please try again.');
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleModeToggle = () => {
+      setIsSignUp(!isSignUp);
+      setErrorMessage('');
+      setPassword('');
     };
 
    return (
@@ -66,6 +87,7 @@ const LoginPage = () => {
               type="text" 
               placeholder="Full Name" 
               required
+              value={name}
               className="w-full pl-12 pr-4 py-4 bg-slate-100 dark:bg-gray-800 dark:text-white dark:border dark:border-gray-700 rounded-2xl outline-none focus:ring-2 focus:ring-brandPurple/20 transition-all"
               onChange={(e) => setName(e.target.value)}
             />
@@ -78,6 +100,8 @@ const LoginPage = () => {
             type="email" 
             placeholder="Email Address" 
             required
+            value={email}
+            autoComplete="email"
             className="w-full pl-12 pr-4 py-4 bg-slate-100 dark:bg-gray-800 dark:text-white dark:border dark:border-gray-700 rounded-2xl outline-none focus:ring-2 focus:ring-brandPurple/20 transition-all"
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -89,11 +113,18 @@ const LoginPage = () => {
             type="password" 
             placeholder="Password" 
             required
+            autoComplete={isSignUp ? 'new-password' : 'current-password'}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full pl-12 pr-4 py-4 bg-slate-100 dark:bg-gray-800 dark:text-white dark:border dark:border-gray-700 rounded-2xl outline-none focus:ring-2 focus:ring-brandPurple/20 transition-all"
           />
         </div>
+
+        {errorMessage && (
+          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 dark:border-red-900/40 dark:bg-red-950/40 dark:text-red-300">
+            {errorMessage}
+          </div>
+        )}
 
         <button 
           type="submit"
@@ -107,7 +138,7 @@ const LoginPage = () => {
       <p className="text-center text-slate-400 dark:text-slate-500 text-sm font-medium">
         {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
         <span 
-          onClick={() => setIsSignUp(!isSignUp)}
+          onClick={handleModeToggle}
           className="text-brandPurple dark:text-indigo-400 cursor-pointer font-bold hover:underline"
         >
           {isSignUp ? 'Sign In' : 'Sign Up'}

@@ -47,8 +47,9 @@ const SmartCalendar = ({ onDateChange, selectedDate }) => {
     return null;
   };
 
-  return (
-    <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-4 lg:p-6 overflow-hidden">
+ return (
+  <div className="bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 p-4 lg:p-6 overflow-hidden transition-colors duration-300">
+    <div className="dark-calendar-wrapper dark:[&_.react-calendar]:bg-transparent dark:[&_.react-calendar]:text-white dark:[&_.react-calendar__month-view__days__day--neighboringMonth]:text-gray-600 dark:[&_.react-calendar__navigation_button]:text-white dark:[&_.react-calendar__tile:hover]:bg-gray-700 dark:[&_.react-calendar__tile--active]:bg-brandPurple">
       <Calendar
         onChange={onDateChange}
         value={selectedDate}
@@ -59,7 +60,8 @@ const SmartCalendar = ({ onDateChange, selectedDate }) => {
         prev2Label={null}
       />
     </div>
-  );
+  </div>
+);
 };
 
 export default SmartCalendar;

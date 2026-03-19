@@ -42,81 +42,80 @@ const LoginPage = () => {
         }
     };
 
-    return (
-    <div className="min-h-screen bg-[#cbd5e1] flex items-center justify-center px-6">
-      <div className="bg-white w-full max-w-md p-10 rounded-[3rem] shadow-2xl space-y-8">
-        
-        <div className="text-center space-y-2">
-          <div className="w-16 h-16 bg-[#5e5ce6] rounded-2xl flex items-center justify-center text-white mx-auto shadow-lg">
-            <Book size={32} />
-          </div>
-          <h2 className="text-3xl font-bold text-slate-900">
-            {isSignUp ? 'Create Account' : 'Welcome Back'}
-          </h2>
-          <p className="text-slate-500 font-medium text-sm px-4">
-            {isSignUp ? 'Join Smart Planner to ace your exams' : 'Log in to your Smart Planner'}
-          </p>
+   return (
+  <div className="min-h-screen bg-[#cbd5e1] dark:bg-slate-950 flex items-center justify-center px-6 transition-colors duration-500">
+    <div className="bg-white dark:bg-gray-900 w-full max-w-md p-10 rounded-[3rem] shadow-2xl space-y-8 border dark:border-gray-800">
+      
+      <div className="text-center space-y-2">
+        <div className="w-16 h-16 bg-brandPurple rounded-2xl flex items-center justify-center text-white mx-auto shadow-lg">
+          <Book size={32} />
         </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {isSignUp && (
-            <div className="relative">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-              <input 
-                type="text" 
-                placeholder="Full Name" 
-                required
-                className="w-full pl-12 pr-4 py-4 bg-slate-100 rounded-2xl outline-none"
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-          )}
-
-          <div className="relative">
-            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-            <input 
-              type="email" 
-              placeholder="Email Address" 
-              required
-              className="w-full pl-12 pr-4 py-4 bg-slate-100 rounded-2xl outline-none"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-
-          <div className="relative">
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-            <input 
-              type="password" 
-              placeholder="Password" 
-              required
-              // 5. Connect the password input to state
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-slate-100 rounded-2xl outline-none"
-            />
-          </div>
-
-          <button 
-            type="submit"
-            disabled={loading} // Disable button while waiting for database
-            className="w-full bg-[#5e5ce6] text-white font-bold py-4 rounded-2xl shadow-xl hover:bg-[#4d4bc4] transition-all active:scale-95 disabled:opacity-50"
-          >
-            {loading ? 'Processing...' : (isSignUp ? 'Join Now' : 'Sign In')}
-          </button>
-        </form>
-
-        <p className="text-center text-slate-400 text-sm font-medium">
-          {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-          <span 
-            onClick={() => setIsSignUp(!isSignUp)}
-            className="text-[#5e5ce6] cursor-pointer font-bold hover:underline"
-          >
-            {isSignUp ? 'Sign In' : 'Sign Up'}
-          </span>
+        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+          {isSignUp ? 'Create Account' : 'Welcome Back'}
+        </h2>
+        <p className="text-slate-500 dark:text-slate-400 font-medium text-sm px-4">
+          {isSignUp ? 'Join Smart Planner to ace your exams' : 'Log in to your Smart Planner'}
         </p>
       </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {isSignUp && (
+          <div className="relative">
+            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+            <input 
+              type="text" 
+              placeholder="Full Name" 
+              required
+              className="w-full pl-12 pr-4 py-4 bg-slate-100 dark:bg-gray-800 dark:text-white dark:border dark:border-gray-700 rounded-2xl outline-none focus:ring-2 focus:ring-brandPurple/20 transition-all"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+        )}
+
+        <div className="relative">
+          <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+          <input 
+            type="email" 
+            placeholder="Email Address" 
+            required
+            className="w-full pl-12 pr-4 py-4 bg-slate-100 dark:bg-gray-800 dark:text-white dark:border dark:border-gray-700 rounded-2xl outline-none focus:ring-2 focus:ring-brandPurple/20 transition-all"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div className="relative">
+          <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full pl-12 pr-4 py-4 bg-slate-100 dark:bg-gray-800 dark:text-white dark:border dark:border-gray-700 rounded-2xl outline-none focus:ring-2 focus:ring-brandPurple/20 transition-all"
+          />
+        </div>
+
+        <button 
+          type="submit"
+          disabled={loading}
+          className="w-full bg-brandPurple text-white font-bold py-4 rounded-2xl shadow-xl hover:bg-indigo-700 transition-all active:scale-95 disabled:opacity-50"
+        >
+          {loading ? 'Processing...' : (isSignUp ? 'Join Now' : 'Sign In')}
+        </button>
+      </form>
+
+      <p className="text-center text-slate-400 dark:text-slate-500 text-sm font-medium">
+        {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
+        <span 
+          onClick={() => setIsSignUp(!isSignUp)}
+          className="text-brandPurple dark:text-indigo-400 cursor-pointer font-bold hover:underline"
+        >
+          {isSignUp ? 'Sign In' : 'Sign Up'}
+        </span>
+      </p>
     </div>
-  );
+  </div>
+);
 };
 
 export default LoginPage;

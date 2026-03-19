@@ -56,6 +56,23 @@
   background-color: #fef2f2; /* red-50 */
 }
 
+/* Custom Dark Mode Overrides for react-calendar */
+.dark .react-calendar {
+  background: transparent !important;
+  color: white !important;
+  border: none !important;
+}
+
+.dark .react-calendar__navigation button:enabled:hover,
+.dark .react-calendar__navigation button:enabled:focus {
+  background-color: #374151 !important; /* gray-700 */
+}
+
+.dark .react-calendar__tile:enabled:hover,
+.dark .react-calendar__tile:enabled:focus {
+  background-color: #374151 !important;
+}
+
 /* Remove default hover effect for exam days to keep the circle clean */
 .exam-day-tile:enabled:hover,
 .exam-day-tile:enabled:focus {

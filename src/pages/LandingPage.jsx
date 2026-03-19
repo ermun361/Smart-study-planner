@@ -3,8 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { 
   Book, LayoutDashboard, BookOpen, BarChart3, 
-  Settings, CheckCircle2, Circle, LogOut, Search, ChevronLeft, ChevronRight, Share2
+  CheckCircle2, Circle, LogOut, Search, ChevronLeft, ChevronRight, Share2
 } from 'lucide-react';
+
+const CALENDAR_DAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+const CALENDAR_DATES = Array.from({ length: 28 }, (_, i) => i + 1);
+const TASKS = [
+  { n: 'Study Math - Chp 5', c: true },
+  { n: 'Review History', c: false },
+  { n: 'Biology Revision', c: false },
+];
 
 const LandingPage = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -40,7 +48,7 @@ const LandingPage = () => {
       </nav>
 
       {/* --- HERO SECTION --- */}
-      <main className="relative z-20 max-w-7xl mx-auto px-6 lg:px-16 pt-10 lg:pt-20 flex flex-col lg:flex-row items-center gap-16">
+      <main className="relative z-20 max-w-7xl mx-auto px-6 lg:px-16 pt-10 lg:pt-20 flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
         
         {/* LEFT: TEXT CONTENT */}
         <div className="flex-1 text-center lg:text-left space-y-8">
@@ -60,8 +68,8 @@ const LandingPage = () => {
         </div>
 
         {/* THE MOCKUP  */}
-        <div className="flex-1 w-full flex justify-center lg:justify-end perspective-1000 group">
-          <div className="relative w-full max-w-[340px] md:max-w-[550px] lg:max-w-[800px] bg-white rounded-[2rem] lg:rounded-[3.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.12)] border border-slate-100 flex h-[280px] md:h-[400px] lg:h-[520px] overflow-hidden transform lg:rotate-y-[-15deg] lg:rotate-x-[8deg] transition-all duration-700 hover:rotate-0 hover:scale-[1.02] cursor-pointer">
+        <div className="flex-1 w-full flex justify-center lg:justify-end lg:mt-0 mt-10 perspective-1000 group order-2 lg:order-none">
+          <div className="relative w-full max-w-[340px] md:max-w-[550px] lg:max-w-[800px] bg-white rounded-[2rem] lg:rounded-[3.5rem] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.12)] border border-slate-100 flex h-[280px] md:h-[400px] lg:h-[520px] overflow-hidden transform lg:rotate-y-[-15deg] lg:rotate-x-[8deg] transition-all duration-700 lg:hover:rotate-0 lg:hover:scale-[1.02] cursor-pointer">
             
             {/* 1. SIDEBAR MOCKUP */}
             <div className="w-16 md:w-28 lg:w-48 bg-[#6D69AC] p-3 lg:p-7 flex flex-col justify-between shrink-0">
@@ -111,10 +119,10 @@ const LandingPage = () => {
                            <div className="flex gap-2 text-slate-300"> <ChevronLeft size={14}/> <ChevronRight size={14}/> </div>
                         </div>
                         <div className="grid grid-cols-7 gap-2 lg:gap-3 text-center">
-                           {['S','M','T','W','T','F','S'].map(d => <span key={d} className="text-[8px] font-black text-slate-200">{d}</span>)}
-                           {[...Array(28)].map((_, i) => (
-                              <div key={i} className={`h-4 w-4 lg:h-8 lg:w-8 flex items-center justify-center text-[8px] lg:text-[10px] font-bold rounded-xl transition-all ${i === 12 ? 'bg-[#6D69AC] text-white shadow-lg shadow-indigo-200' : 'text-slate-300 hover:bg-slate-50'}`}>
-                                 {i + 1}
+                           {CALENDAR_DAYS.map((d, index) => <span key={`${d}-${index}`} className="text-[8px] font-black text-slate-200">{d}</span>)}
+                           {CALENDAR_DATES.map((date) => (
+                              <div key={date} className={`h-4 w-4 lg:h-8 lg:w-8 flex items-center justify-center text-[8px] lg:text-[10px] font-bold rounded-xl transition-all ${date === 13 ? 'bg-[#6D69AC] text-white shadow-lg shadow-indigo-200' : 'text-slate-300 hover:bg-slate-50'}`}>
+                                 {date}
                               </div>
                            ))}
                         </div>
@@ -124,11 +132,7 @@ const LandingPage = () => {
                   {/* Real Tasks Mini */}
                   <div className="hidden lg:block lg:col-span-5 space-y-4">
                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Today's Tasks</p>
-                     {[
-                       {n: "Study Math - Chp 5", c: true},
-                       {n: "Review History", c: false},
-                       {n: "Biology Revision", c: false}
-                     ].map((t, i) => (
+                     {TASKS.map((t, i) => (
                         <div key={i} className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
                            <div className="flex items-center gap-3 min-w-0">
                               {t.c ? <CheckCircle2 size={16} className="text-green-500" /> : <Circle size={16} className="text-slate-100" />}
@@ -153,14 +157,6 @@ const LandingPage = () => {
         </div>
       </main>
 
-      {/* --- MOBILE REPLICATOR */}
-      <style>{`
-        @media (max-width: 1024px) {
-          main { flex-direction: column !important; }
-          .perspective-1000 { order: 2; margin-top: 40px; justify-content: center !important; }
-          .lg\\:rotate-y-\\[-15deg\\] { transform: rotate(0deg) !important; }
-        }
-      `}</style>
     </div>
   );
 };
